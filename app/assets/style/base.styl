@@ -1,0 +1,155 @@
+*, *:before, *:after
+    box-sizing: border-box
+html
+body
+    height 100%
+    width 100%
+    font-family $base-ff
+    font-size $base-fs
+    color $base-fc
+
+body
+    -webkit-font-smoothing antialiased
+
+a
+    color $color-link
+    transition: color 0.3s ease
+
+    &:hover
+        text-decoration: none
+        color $color-link-hover
+
+p
+    margin-bottom 20px
+    line-height $base-lh
+
+h1
+    font-size $fsH1
+    font-family: $base-ff-light
+    line-height: 1.3
+    font-weight normal
+    margin-bottom: 0.6em
+h2
+    font-size $fsH2
+    font-family: $base-ff-light
+    margin-bottom: 0.8em
+    line-height: 1.4
+    font-weight normal
+h3
+    font-size $fsH3
+    font-family: $base-ff-light
+    margin-bottom: 0.8em
+    line-height: 1.5
+    font-weight normal
+h4
+    font-size $fsH4
+    font-family: $base-ff-light
+    margin-bottom: 0.8em
+    line-height: 1.5
+    font-weight normal
+
+
+b, strong
+    font-family $base-ff-bold
+input, button
+    appearance none
+//Content
+.content
+    img
+        max-width: 380px
+        float right
+        border 1px solid $color-border
+        margin-left 20px
+    li
+        margin-bottom 15px
+        font-size: $base-fs
+        line-height: $base-lh
+        padding-left: 30px
+        list-style: none
+        position: relative
+    ul
+        list-style: none
+        & li
+            &:before
+                content ''
+                width 4px
+                height @width
+                background-color: $color-main
+                position: absolute
+                left 0
+                top 13px
+    ol
+        counter-reset: myCounter2
+        list-style: none
+        & li
+            &:before
+                counter-increment: myCounter2;
+                content:counter(myCounter2) '.';
+                width auto
+                height auto
+                border none
+                position: absolute
+                left 0
+                top 0
+                color $color-main
+                font-family: $base-ff-semibold
+                background-color: transparent
+
+    sup
+        vertical-align: super
+        font-size: smaller
+    em, i
+        font-family: $base-ff-italic
+
+
+    blockquote
+        margin 40px 0
+        padding 15px 60px
+        position: relative
+        font-family: $base-ff-semibolditalic
+        line-height: $base-lh
+        background-color: #e9fdff
+        border-left 5px solid $color-main
+        &:before
+            content: '"';
+            position: absolute;
+            font-size: 120px;
+            color: $color-main
+            left: -17px;
+            top: 14px;
+            line-height: 80px;
+            text-align: left;
+            user-select none
+
+        *
+            &:last-child
+                margin-bottom 0
+
+    table
+        $color-border = rgba(#000, 0.06)
+        width 100%
+        border-radius: 3px
+        overflow: hidden
+        border-collapse: separate
+        & th, & td
+            padding 15px 30px 15px 20px
+            line-height: 1.5
+            vertical-align: middle;
+            &:first-child
+                border-left 1px solid $color-border
+
+        & th
+            font-weight: normal
+            color #fff
+            background-color: $color-main
+            border-bottom none
+            border-right 1px solid $color-border
+            text-align: left
+
+
+        & td
+            border-bottom 1px solid $color-border
+            border-right 1px solid $color-border
+
+        & tr:nth-child(even)
+            background-color: #e7fcff

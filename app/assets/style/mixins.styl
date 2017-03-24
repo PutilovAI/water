@@ -1,0 +1,80 @@
+fontFace($font){
+    @font-face {
+        font-family: $font;
+        src: url('../fonts/'+$font+'/'+$font+'.eot');
+        src: url('../fonts/'+$font+'/'+$font+'.eot?#iefix') format('embedded-opentype'),
+             url('../fonts/'+$font+'/'+$font+'.woff') format('woff'),
+             url('../fonts/'+$font+'/'+$font+'.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+}
+
+pos-center(left = 50%, top = 50%)
+    position: absolute
+    top top
+    left left
+    transform translate(-50%, -50%)
+
+pos-center-w()
+    position: absolute
+    left 50%
+    transform translateX(-50%)
+
+pos-center-h()
+    position: absolute
+    top 50%
+    transform translateY(-50%)
+
+flex-center()
+    display flex
+    align-items: center
+    justify-content: center
+
+placeholder()
+    &::-webkit-input-placeholder
+        {block}
+    &::-moz-placeholder
+        {block}
+    &:-ms-input-placeholder
+        {block}
+    &:-moz-placeholder
+        {block}
+
+imgSize(src)
+    width image-size(src)[0]
+    height image-size(src)[1]
+
+arrow(height = 7px, width = 2px, bg = #c8c8c8, deg = 45deg, right = auto, left = auto, direction = 'right')
+    $degBefore = -(deg)
+    $degAfter = deg
+
+    if (direction == 'left' || direction == 'up')
+        $degBefore = deg
+        $degAfter = -(deg)
+
+    &:before, &:after
+        content ''
+        position: absolute
+        top 50%
+        width: width
+        height height
+        background bg
+        right right
+        left left
+
+    &:before
+        transform translate(-50%, -50%) rotateZ( $degBefore )
+    &:after
+        transform translate(-50%, -50%) rotateZ( $degAfter )
+
+    if (direction == 'down' || direction == 'up')
+        &:before
+            margin-right 4px
+    else
+        &:before
+            margin-top -2px
+            margin-right 0
+        &:after
+            margin-top 2px
+            margin-right 0
