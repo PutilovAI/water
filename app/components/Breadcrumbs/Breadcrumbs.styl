@@ -1,0 +1,24 @@
+.breadcrumbs
+    display flex
+    margin 15px 0
+
+    &__item-link
+        color $color-grey-light
+        
+    &__item
+        position: relative;
+        margin-left: 30px
+        color $color-grey-light
+        &:before
+            content '>'
+            position: absolute;
+            pos-center-h()
+            left: -18px
+            font-size: 12px
+        &:first-child
+            margin-left: 0
+            &:before
+                display: none
+        &.active
+            & ^[0]__item-link
+                font-family: $base-ff-bold

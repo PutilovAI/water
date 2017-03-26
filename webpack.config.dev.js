@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     devtool: "cheap-eval-source-map",
@@ -37,6 +38,24 @@ module.exports = {
 
                 ]
             },
+            // {
+            //     test: /\.(png|jpg)$/,
+            //     loader: 'file-loader?name=[name].[ext]&context=./app/static'
+            //     // use: ExtractTextPlugin.extract({
+            //     //     use: [
+            //     //         {},
+            //     //     ]
+            //     // })
+            // },
+            {
+                test: /\.(png|jpg|svg)$/,
+                loader: 'file-loader?name=assets/img/[name].[ext]'
+            },
+            {
+                test: /\.(ttf|woff|eot)$/,
+                loader: 'file-loader?name=assets/fonts/[path][name].[ext]'
+            },
+
             {
                 test: /\.styl$/,
                 use: [
@@ -47,25 +66,36 @@ module.exports = {
                         loader: 'css-loader'
                     },
                     {
-                        loader: 'stylus-loader'
+                        loader: 'stylus-loader?resolve url'
                     }
                 ]
-                // use: ExtractTextPlugin.extract({
-                //     use: [
-                //         {
-                //             loader: 'css-loader'
-                //         },
-                //         {
-                //             loader: 'stylus-loader'
-                //         }
-                //     ]
-                // })
-            }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    }
+                ]
+            },
         ]
     },
     plugins: [
+        // new CopyWebpackPlugin([
+        //     {
+        //         from: {
+        //             glob:'app/**/*',
+        //             dot: true
+        //         },
+        //         to: 'static'
+        //     },
+        //
+        // ])
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
-        // new ExtractTextPlugin('/css/main.css')
+        //new ExtractTextPlugin('/css/')
     ],
 };

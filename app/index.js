@@ -3,7 +3,10 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import App from './components/App/App';
+
+//import 'react-select/dist/react-select.css';
 import './assets/style/main.styl';
+
 import configureStore from './store/configureStore'
 import rootReducer from './reducers';
 

@@ -1,11 +1,39 @@
 .header
-    background: red
+    background: #fff
+    box-shadow: 0 2px 5px rgba(#000, 0.2)
     &__container
         margin 0 auto
-        max-width: 1240px
+        max-width: 100%
         width 100%
-        padding 0 20px
+        padding-right 20px
         display flex
         justify-content: space-between;
         align-items: center;
+    &__col
+        display flex
+    &__item-link
         height 60px
+        line-height: 58px
+        text-align: center;
+        padding 0 15px
+        color $base-fc
+        font-size: 16px
+        display: block
+        &:hover
+            color $base-fc
+            background-color: lighten($color-main, 70%)
+    &__item
+        &_logo
+            margin-right: 15px
+    &__item.active
+        position: relative;
+        &:after
+            content ''
+            height 12px
+            width 100%
+            position: absolute;
+            bottom 0
+            left 0
+            background url(img/header-item-pattern.svg) repeat-x
+            background-size auto 100%
+            background-position bottom center
