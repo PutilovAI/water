@@ -5,19 +5,17 @@ export default class OffersFilter extends Component {
 
     render() {
         var options = [
-        	{ value: 'one', label: 'По расстоянию' },
-        	{ value: 'two', label: 'По напору' },
-        	{ value: 'three', label: 'По рейтингу' }
+        	{ value: 'distance', label: 'По расстоянию' },
+        	{ value: 'pressure', label: 'По напору' },
+        	{ value: 'rating', label: 'По рейтингу' }
         ];
 
-        function logChange(val) {
-        	console.dir(val);
-        }
+
         return (
             <div className="offers-filter">
                 <div className="offers-filter__select">
 
-                    <Select ref="stateSelect" options={options} simpleValue clearable={this.state.clearable} name="selected-state" disabled={this.state.disabled} value={this.state.selectValue} onChange={this.updateValue} searchable={this.state.searchable} />
+                    <Select ref="stateSelect" options={options} simpleValue clearable={false} name="selected-state" value={this.props.value} onChange={this.props.onChange} searchable={false} />
 
                 </div>
                 <div className="offers-filter__sort">

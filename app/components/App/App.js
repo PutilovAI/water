@@ -4,7 +4,7 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
 import Footer from '../Footer/Footer'
 import SearchResults from '../SearchResults/SearchResults'
 import SearchFilter from '../SearchFilter/SearchFilter'
-import OffersToolbar from '../OffersToolbar/OffersToolbar'
+import OffersFilter from '../OffersFilter/OffersFilter';
 
 import * as AppActions from '../../actions/SearchActions'
 
@@ -31,12 +31,24 @@ export class App extends Component {
 
                                 <div className="search__content">
                                     <main className="search__content-main">
-                                        <OffersToolbar offersFilter={this.props.offersFilter}/>
-                                        <SearchResults filter={this.props.filter} items={this.props.searchResults}/>
+
+                                        <div className="offersToolbar">
+                                            <div className="offersToolbar__filters">
+                                                <OffersFilter value={this.props.offersFilter.value} onChange={this.props.actions.offersFiltering}/>
+
+                                            </div>
+                                            <div className="offersToolbar__switches">
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <SearchResults searchFilter={this.props.searchFilter} items={this.props.searchResults} offersFilter={this.props.offersFilter}/>
 
                                     </main>
                                     <aside className="search__content-aside">
-                                        <SearchFilter filter={this.props.filter} change={this.props.actions.filtering}/>
+                                        <SearchFilter filter={this.props.searchFilter} change={this.props.actions.searchFiltering}/>
                                     </aside>
 
                                 </div>
@@ -58,7 +70,8 @@ export class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    filter: state.app.filter,
+    offersFilter: state.app.offersFilter,
+    searchFilter: state.app.searchFilter,
     searchResults: state.app.searchResults
   }
 }

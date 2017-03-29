@@ -1,38 +1,40 @@
 import React, { Component, PropTypes } from 'react';
-
-class ResultItem extends Component{
-    render() {
-        return (
-            <div className="search-results__list-item">
-                <div className="search-results__list-item-title">
-                    {this.props.title}
-                </div>
-                <div className="search-results__list-item-type">
-                    {this.props.type}
-                </div>
-            </div>
-        );
-    }
-}
+import OfferCard from '../OfferCard/OfferCard'
 
 export default class SearchResults extends Component {
+    getResults(){
+        var searchResults = this.props.items;
+        var sortType = this.props.offersFilter.value;
 
+        var results = searchResults.sort( (a, b) => {
+            return parseFloat(a[sortType]) - parseFloat(b[sortType])
+        } )
+
+        results = results.map( (item, index) => {
+
+            if (this.props.searchFilter[item.type]){
+                return (
+
+                    <div className="search-results__list-item">
+                        <OfferCard  {...item} key={item.id}/>
+                    </div>
+                )
+            }
+
+        } )
+
+        return (
+            <div className="search-results__list">
+                {results}
+            </div>
+        );
+
+    }
     render() {
-        var searchResults = this.props.items
+
         return (
             <div className="search-results">
-                <div className="search-results__list">
-                    {
-                        searchResults.map( (item, index) => {
-
-                            if (this.props.filter[item.type]){
-                                return <ResultItem key={index} title={item.title} type={item.type}/>
-                            }
-
-                        } )
-                    }
-
-                </div>
+                { this.getResults() }
             </div>
         );
     }

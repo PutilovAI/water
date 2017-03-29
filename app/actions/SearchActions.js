@@ -1,13 +1,12 @@
-export function filtering(filter){
+export function searchFiltering(filter){
     return {
-        type: 'FILTERING',
-        filter: filter
+        type: 'SEARCH_FILTER',
+        searchFilter: filter
     }
 }
-
-export function anyAction(){
+export function offersFiltering(val){
     return {
-        type: 'FILTERING',
-        filter: filter
+        type: 'OFFERS_FILTER',
+        value: val
     }
 }

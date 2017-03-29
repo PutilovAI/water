@@ -84,16 +84,13 @@ module.exports = {
         ]
     },
     plugins: [
-        // new CopyWebpackPlugin([
-        //     {
-        //         from: {
-        //             glob:'app/**/*',
-        //             dot: true
-        //         },
-        //         to: 'static'
-        //     },
-        //
-        // ])
+        new CopyWebpackPlugin([
+            {
+                from: 'app/static',
+                to: 'static'
+            },
+
+        ]),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
         //new ExtractTextPlugin('/css/')
