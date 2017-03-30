@@ -7,3 +7,21 @@
     height 40px
     width 40px
     border: 1px solid $color-border
+    flex-center()
+    cursor pointer
+    margin-left -1px
+    position: relative;
+    z-index: 1
+    transition: all 0.3s ease
+    &:before
+        icon(icon_sort)
+        font-size: 20px
+        color $color-grey
+        transition: color 0.3s ease
+    &:hover
+        border-color $color-grey
+        &:before
+            color $color-grey-dark
+    &.decrement
+        &:before
+            transform rotate(180deg)

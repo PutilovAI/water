@@ -1,5 +1,9 @@
 .offer-card
+    position: relative;
     cf()
+    padding 20px
+    &:hover
+        background-color: lighten($color-second, 90%)
     &__col
         float left
         margin-right: 20px
@@ -9,6 +13,9 @@
             width 200px
         &_main
             width 300px
+
+        &_props
+            padding-top 3px
     &__img
         max-width: 100%
         display: block;
@@ -20,5 +27,51 @@
     &__address
         font-size: $fsH4
         line-height: 1.4
+        margin-bottom: 10px
     &__type
         opacity: 0.5
+
+    &__prop
+        color $color-grey
+        padding-left 40px
+        position: relative;
+        line-height: 1.4
+        margin-bottom: 15px
+        &:before
+            icon()
+            color $color-grey-light
+            font-size: 20px
+            position: absolute;
+            left 0
+            width 30px
+            text-align: center;
+            pos-center-h()
+        &_distance
+            &:before
+                icon(icon_map-marker)
+        &_pressure
+            &:before
+                icon(icon_pressure)
+
+    &__rating
+        position: absolute;
+        right 20px
+        top 20px
+        font-size: $fsH3
+
+    &__visitors
+        position: absolute;
+        right 20px
+        bottom 20px
+        font-size: 12px
+        padding-left 30px
+        color $color-grey-light
+        &:before
+            icon(icon_persons-water)
+            color $color-grey-light
+            font-size: 20px
+            position: absolute;
+            left 0
+            width 30px
+            text-align: center;
+            pos-center-h()

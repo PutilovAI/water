@@ -34,7 +34,7 @@ export class App extends Component {
 
                                         <div className="offersToolbar">
                                             <div className="offersToolbar__filters">
-                                                <OffersFilter value={this.props.offersFilter.value} onChange={this.props.actions.offersFiltering}/>
+                                                <OffersFilter value={this.props.offersFilter.value} selectOnChange={this.props.actions.offersFiltering} sortOnChange={this.props.actions.offersSorting} order={this.props.offersFilter.order}/>
 
                                             </div>
                                             <div className="offersToolbar__switches">

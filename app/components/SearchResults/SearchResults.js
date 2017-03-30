@@ -3,19 +3,32 @@ import OfferCard from '../OfferCard/OfferCard'
 
 export default class SearchResults extends Component {
     getResults(){
-        var searchResults = this.props.items;
-        var sortType = this.props.offersFilter.value;
+        var searchFilter = this.props.searchFilter,
+            searchResults = this.props.items,
+            sortType = this.props.offersFilter.value,
+            sortOrder = this.props.offersFilter.order,
+            allTypes = true;
 
         var results = searchResults.sort( (a, b) => {
-            return parseFloat(a[sortType]) - parseFloat(b[sortType])
+            if (sortOrder == 'decrement')
+                return parseFloat(b[sortType]) - parseFloat(a[sortType])
+            else
+                return  parseFloat(a[sortType]) - parseFloat(b[sortType])
+
         } )
+
+        for (var key in searchFilter){
+            if ( searchFilter[key] == true ){
+                allTypes = false
+            }
+        }
+
 
         results = results.map( (item, index) => {
 
-            if (this.props.searchFilter[item.type]){
+            if (allTypes || searchFilter[item.type]){
                 return (
-
-                    <div className="search-results__list-item " key={index}>
+                    <div className="search-results__list-item" key={index}>
                         <OfferCard  {...item} />
                     </div>
                 )

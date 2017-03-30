@@ -22,16 +22,16 @@ export default class OfferCard extends Component {
                             {this.props.address}
                         </div>
                         <div className="offer-card__type">
-                            {this.props.type}
+                            {this.props.typeText}
                         </div>
                     </div>
 
                     <div className="offer-card__col offer-card__col_props">
                         <div className="offer-card__prop offer-card__prop_distance">
-                            {this.props.distance}
+                            {this.props.distance} км
                         </div>
                         <div className="offer-card__prop offer-card__prop_pressure">
-                            {this.props.pressure}
+                            {this.props.pressure} л/мин
                         </div>
                     </div>
                 </div>

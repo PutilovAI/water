@@ -10,3 +10,8 @@ export function offersFiltering(val){
         value: val
     }
 }
+export function offersSorting(e){
+    return {
+        type: 'OFFERS_SORT'
+    }
+}

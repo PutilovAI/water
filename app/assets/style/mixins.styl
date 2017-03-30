@@ -45,6 +45,22 @@ img-size(src)
     width image-size(src)[0]
     height image-size(src)[1]
 
+icon()
+	if arguments
+		content arguments
+	else
+		content ''
+
+	font-family $icomoon
+	speak none
+	font-style normal
+	font-weight normal
+	font-variant normal
+	text-transform none
+	line-height 1
+	-webkit-font-smoothing antialiased
+	-moz-osx-font-smoothing grayscale
+
 arrow(height = 7px, width = 2px, bg = #c8c8c8, deg = 45deg, right = auto, left = auto, direction = 'right')
     $degBefore = -(deg)
     $degAfter = deg
