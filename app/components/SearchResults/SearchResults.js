@@ -15,8 +15,8 @@ export default class SearchResults extends Component {
             if (this.props.searchFilter[item.type]){
                 return (
 
-                    <div className="search-results__list-item">
-                        <OfferCard  {...item} key={item.id}/>
+                    <div className="search-results__list-item " key={index}>
+                        <OfferCard  {...item} />
                     </div>
                 )
             }
