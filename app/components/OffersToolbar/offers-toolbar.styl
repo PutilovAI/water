@@ -1,0 +1,45 @@
+.offers-toolbar
+    display: flex
+    justify-content space-between
+    margin-bottom 20px
+    &__switches
+        display: flex
+    &__switch
+        height 40px
+        padding 0 20px
+        padding-left 40px
+        line-height: 38px
+        border 1px solid $color-border
+        border-right-width: 0
+        cursor pointer
+        position: relative;
+        transition: all 0.3s ease
+        &:before
+            icon()
+            position: absolute;
+            pos-center-h()
+            left 0
+            width 40px
+            font-size: 16px
+            text-align: center;
+        &:hover
+            background-color $button-bg-grey_hover
+
+        &:first-child
+            border-radius: $button-border-radius 0 0 $button-border-radius
+        &:last-child
+            border-radius: 0 $button-border-radius $button-border-radius 0
+            border-right-width: 1px
+        &_list
+            &:before
+                content: icon_list-th
+        &_map
+            &:before
+                content: icon_map-o
+        &.active
+            cursor: default;
+            background-color: $color-main
+            border-color $color-main
+            color #fff
+            & + ^[0]__switch
+                border-left-color $color-main

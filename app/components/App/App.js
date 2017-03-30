@@ -21,7 +21,7 @@ export class App extends Component {
 
                 <div className='wrapper__page-top'>
                     <Header />
-                    <div className="wrapper__content">
+                    <div className="wrapper__content search">
                         <section className="section">
                             <div className="container">
                                 <Breadcrumbs />
@@ -29,16 +29,26 @@ export class App extends Component {
                                     Источники в Свердловской области
                                 </h1>
 
+                                <h4 className="search__results-count">
+                                    Найдены {this.props.searchResults.length} источника
+                                </h4>
+
+
                                 <div className="search__content">
                                     <main className="search__content-main">
 
-                                        <div className="offersToolbar">
-                                            <div className="offersToolbar__filters">
+                                        <div className="offers-toolbar">
+                                            <div className="offers-toolbar__filters">
                                                 <OffersFilter value={this.props.offersFilter.value} selectOnChange={this.props.actions.offersFiltering} sortOnChange={this.props.actions.offersSorting} order={this.props.offersFilter.order}/>
 
                                             </div>
-                                            <div className="offersToolbar__switches">
-
+                                            <div className="offers-toolbar__switches">
+                                                <div className="offers-toolbar__switch offers-toolbar__switch_list active">
+                                                    Списком
+                                                </div>
+                                                <div className="offers-toolbar__switch offers-toolbar__switch_map">
+                                                    На карте
+                                                </div>
                                             </div>
 
                                         </div>

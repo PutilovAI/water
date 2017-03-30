@@ -1,11 +1,15 @@
 .offer-card
     position: relative;
-    cf()
     padding 20px
     &:hover
         background-color: lighten($color-second, 90%)
+    &__row
+        //cf()
+        display: flex
+        &_wrapper
+            align-items: stretch;
     &__col
-        float left
+        //float left
         margin-right: 20px
         &:last-child
             margin-right 0
@@ -16,6 +20,13 @@
 
         &_props
             padding-top 3px
+
+    &__wrap-info
+        display: flex
+        //min-height 150px
+        height 100%//хак для chrome
+        flex-direction: column;
+        justify-content: space-between;
     &__img
         max-width: 100%
         display: block;
@@ -62,7 +73,7 @@
     &__visitors
         position: absolute;
         right 20px
-        bottom 20px
+        bottom 30px
         font-size: 12px
         padding-left 30px
         color $color-grey-light
@@ -75,3 +86,39 @@
             width 30px
             text-align: center;
             pos-center-h()
+    &__buttons
+        margin-top: 15px
+    &__button
+        display: inline-block;
+        font-size: $base-fs
+        height 30px
+        padding 0 20px
+        padding-left 40px
+        line-height: 28px
+        border-radius $button-border-radius
+        border 1px solid $color-border
+        cursor pointer
+        position: relative;
+        margin-right: 10px
+        transition: all 0.3s ease
+        &:before
+            icon()
+            position: absolute;
+            pos-center-h()
+            color $color-grey
+            left 0
+            width 40px
+            font-size: 16px
+            text-align: center;
+        &:hover
+            background-color $button-bg-grey_hover
+
+        &_favorite
+            &:before
+                content: icon_heart-o
+        &_will
+            &:before
+                content: icon_flag-o
+        &_did
+            &:before
+                content: icon_check
