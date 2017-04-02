@@ -1,3 +1,23 @@
 .search-filter
     background-color: #eff4ff
     padding 20px
+
+    &__fieldset
+        margin-bottom: 15px
+    &__fieldset-label
+        margin-bottom: 12px
+    &__checkbox
+        display: inline-block;
+        margin-right: 20px
+        &:last-child
+            margin-right: 0
+
+    &__reset
+        cursor: pointer
+        color $base-fc
+        display: inline-block;
+        transition: all 0.3s ease
+        &:hover
+            color $color-link-hover
+    &__reset-text
+        border-bottom: 1px dotted

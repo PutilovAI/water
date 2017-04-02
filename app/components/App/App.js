@@ -6,7 +6,7 @@ import SearchResults from '../SearchResults/SearchResults'
 import SearchFilter from '../SearchFilter/SearchFilter'
 import OffersFilter from '../OffersFilter/OffersFilter';
 
-import * as AppActions from '../../actions/SearchActions'
+import * as AppActions from '../../actions/AppActions'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -58,7 +58,7 @@ export class App extends Component {
 
                                     </main>
                                     <aside className="search__content-aside">
-                                        <SearchFilter filter={this.props.searchFilter} change={this.props.actions.searchFiltering}/>
+                                        <SearchFilter filter={this.props.searchFilter} onChange={::this.props.actions.searchFiltering}/>
                                     </aside>
 
                                 </div>

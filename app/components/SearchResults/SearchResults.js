@@ -6,27 +6,27 @@ export default class SearchResults extends Component {
         var searchFilter = this.props.searchFilter,
             searchResults = this.props.items,
             sortType = this.props.offersFilter.value,
-            sortOrder = this.props.offersFilter.order,
-            allTypes = true;
+            sortOrder = this.props.offersFilter.order;
 
         var results = searchResults.sort( (a, b) => {
             if (sortOrder == 'decrement')
                 return parseFloat(b[sortType]) - parseFloat(a[sortType])
             else
-                return  parseFloat(a[sortType]) - parseFloat(b[sortType])
+                return parseFloat(a[sortType]) - parseFloat(b[sortType])
 
         } )
 
-        for (var key in searchFilter){
-            if ( searchFilter[key] == true ){
-                allTypes = false
-            }
-        }
-
 
         results = results.map( (item, index) => {
+            var isValidItem = true;
 
-            if (allTypes || searchFilter[item.type]){
+            for (var key in searchFilter){
+                if ( searchFilter[key] && !item[key] ){
+                    isValidItem = false
+                }
+            }
+
+            if (isValidItem){
                 return (
                     <div className="search-results__list-item" key={index}>
                         <OfferCard  {...item} />
