@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Checkbox } from '../Input/Input';
+import Slider from 'react-slider';
+
 
 export default class SerchFilter extends Component {
     handlerChangeCheckbox(e){
+        //e.preventDefault();
 
         var oldFilter = this.props.filter;
 
@@ -11,6 +14,7 @@ export default class SerchFilter extends Component {
         this.props.onChange.call(this, newFilter);
     }
     handlerClickReset(e){
+        e.preventDefault();
         var oldFilter = this.props.filter;
         var newFilter = {};
 
@@ -30,7 +34,7 @@ export default class SerchFilter extends Component {
                             Тип источника:
                         </div>
                         <div className="search-filter__field">
-                            
+
                             <Checkbox label='Родник' modifier="search-filter__checkbox" checked={this.props.filter.rodnik} onChange={::this.handlerChangeCheckbox} attr={{'data-type': 'rodnik'}} />
 
                             <Checkbox label='Колонка' modifier="search-filter__checkbox" checked={this.props.filter.kolonka} onChange={::this.handlerChangeCheckbox} attr={{'data-type': 'kolonka'}} />
@@ -66,7 +70,7 @@ export default class SerchFilter extends Component {
                             Ожидание, мин:
                         </div>
                         <div className="search-filter__field">
-
+                            <Slider defaultValue={[0, 100]} withBars />
                         </div>
                     </div>
                     <div className="search-filter__fieldset">
