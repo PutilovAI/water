@@ -1,14 +1,14 @@
 .input
     position: relative
     margin-bottom: 10px
-    &__text,
+    &__field,
     &__textarea
-        font-size: $fsH5
+        font-size: $base-fs
         padding 0.75em 1.2em
         background-color $input-bg
         border 1px solid $input-border
         outline none
-        border-radius 3px
+        border-radius $input-border-radius
         color $input-color
         transition all 0.2s linear
         width: 100%
@@ -100,6 +100,7 @@
         z-index: 1
         margin-top: -3px
         border-radius: 0 0 3px 3px
+
     &__error-text
         padding 0.9em 1.2em 0.8em
 
@@ -126,3 +127,31 @@
             visibility: visible;
             opacity: 1
             max-height: 100px
+
+    &_range
+        width 50%
+        margin-bottom: 0
+        z-index: 1
+
+        & ^[0]__field
+            padding-left 35px
+
+        & ^[0]__label
+            margin-bottom: 0
+        & ^[0]__label-text
+            position: absolute;
+            width 30px
+            padding-left 10px
+            color $color-grey
+            pos-center-h()
+            z-index: 2
+
+        &:first-child
+            & ^[0]__field
+                border-radius: $input-border-radius 0 0 $input-border-radius
+        &:last-child
+            margin-left: -1px
+            & ^[0]__field
+                border-radius: 0 $input-border-radius $input-border-radius 0
+        &:hover, &.focus
+            z-index: 2

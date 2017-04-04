@@ -4,9 +4,17 @@ const initialState = {
         order: 'increment'
     },
     searchFilter: {
-        rodnik: true,
-        kolonka: false,
-        analiz: false
+        checkboxes: {
+            rodnik: true,
+            kolonka: false,
+            analiz: false
+        },
+        ranges: {
+            distance: [0, 9999],
+            rating: [0, 10],
+            pressure: [0, 30],
+            waiting: [0, 50]
+        }
     },
     searchResults: [
         {
