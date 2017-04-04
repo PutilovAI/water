@@ -20,28 +20,35 @@ class SearchRange extends Component{
         this.props.onChange.call(this, newFilter);
     }
     onChangeInput(e){
-
         var type = this.props.type,
-            oldFilter = this.props.filter;
+            oldFilter = this.props.filter,
+            newFilter = {...oldFilter},
+            direction = e.target.dataset.direction,
+            newValue = oldFilter.ranges[type];
 
-        var newFilter = Object.assign({}, oldFilter,
-            {
-                ranges: Object.assign({}, oldFilter.ranges, {
-                    [type]: e
-                })
 
-            } );
+        if (direction == 'from'){
+            newValue[0] = parseInt(e.target.value)
+        } else {
+            newValue[1] = parseInt(e.target.value)
+        }
+
+        newFilter.ranges[type] = newValue;
 
         this.props.onChange.call(this, newFilter);
     }
     render(){
+        var self = this,
+            type = self.props.type,
+            valueFrom = this.props.filter.ranges[type][0],
+            valueTo   = this.props.filter.ranges[type][1];
         return (
             <div className="search-filter__slider">
-                <Slider defaultValue={[10, 100]} max={200} min={0} withBars onChange={::this.onChangeSlider} />
+                <Slider  max={200} min={0} value={[valueFrom, valueTo]} withBars onChange={::this.onChangeSlider} />
 
                 <div className="search-filter__slider-inputs">
-                    <InputRange value="10" label="от" onChange={::this.onChangeInput} attr={{'data-type': 'from'}}/>
-                    <InputRange value="99" label="до" onChange={::this.onChangeInput} attr={{'data-type': 'to'}}/>
+                    <InputRange value={valueFrom} label="от" onChange={::this.onChangeInput} attr={{'data-direction': 'from'}}/>
+                    <InputRange value={valueTo} label="до" onChange={::this.onChangeInput} attr={{'data-direction': 'to'}}/>
                 </div>
             </div>
         )
@@ -51,25 +58,52 @@ class SearchRange extends Component{
 export default class SerchFilter extends Component {
     handlerChangeCheckbox(e){
 
-        var oldFilter = this.props.filter;
+        var oldFilter = this.props.filter,
+            cxbGroup = e.target.dataset.group,
+            cxbName = e.target.dataset.name,
+            newFilter = null;
 
-        var newFilter = Object.assign({}, oldFilter,
-            {
-                checkboxes: Object.assign({}, oldFilter.checkboxes, {
-                    [e.target.dataset.type]: e.target.checked
-                })
+        if (cxbGroup){
+            newFilter = Object.assign({}, oldFilter,
+                {
+                    checkboxes: Object.assign({}, oldFilter.checkboxes, {
+                        [cxbGroup]: Object.assign({}, oldFilter.checkboxes[cxbGroup], {
+                            [cxbName]: e.target.checked
+                        })
+                    })
+                } );
 
-            } );
+        } else {
+            newFilter = Object.assign({}, oldFilter,
+                {
+                    checkboxes: Object.assign({}, oldFilter.checkboxes, {
+                        [cxbName]: e.target.checked
+                    })
+                } );
+        }
 
         this.props.onChange.call(this, newFilter);
     }
     handlerClickReset(e){
         e.preventDefault();
         var oldFilter = this.props.filter;
-        var newFilter = {};
+        var newFilter = {...oldFilter};
 
-        for (var key in oldFilter){
-            newFilter[key] = false
+        for (var key in oldFilter.checkboxes){
+            var group = oldFilter.checkboxes[key];
+
+            if (typeof group === 'boolean'){
+
+                newFilter.checkboxes[key] = false
+
+            } else if ( typeof group == 'object'){
+                console.log( key)
+                newFilter.checkboxes[key] = {};
+
+                for (let innerkey in group){
+                    newFilter.checkboxes[key][innerkey] = false
+                }
+            }
         }
 
         this.props.onChange.call(this, newFilter);
@@ -85,9 +119,9 @@ export default class SerchFilter extends Component {
                         </div>
                         <div className="search-filter__field">
 
-                            <Checkbox label='Родник' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.rodnik} onChange={::this.handlerChangeCheckbox} attr={{'data-type': 'rodnik'}} />
+                            <Checkbox label='Родник' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.type.rodnik} onChange={::this.handlerChangeCheckbox} attr={{'data-group': 'type', 'data-name': 'rodnik' }} />
 
-                            <Checkbox label='Колонка' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.kolonka} onChange={::this.handlerChangeCheckbox} attr={{'data-type': 'kolonka'}} />
+                            <Checkbox label='Колонка' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.type.kolonka} onChange={::this.handlerChangeCheckbox} attr={{'data-group': 'type', 'data-name': 'kolonka'}} />
 
                         </div>
                     </div>
@@ -97,6 +131,14 @@ export default class SerchFilter extends Component {
                         </div>
                         <div className="search-filter__field">
 
+                        </div>
+                    </div>
+                    <div className="search-filter__fieldset">
+                        <div className="search-filter__fieldset-label">
+                            Рейтинг, балл:
+                        </div>
+                        <div className="search-filter__field">
+                            <SearchRange type="rating" filter={this.props.filter} onChange={::this.props.onChange}/>
                         </div>
                     </div>
                     <div className="search-filter__fieldset">
@@ -112,7 +154,7 @@ export default class SerchFilter extends Component {
                             Напор воды, л/мин:
                         </div>
                         <div className="search-filter__field">
-                            <SearchRange type="presure" filter={this.props.filter} onChange={::this.props.onChange}/>
+                            <SearchRange type="pressure" filter={this.props.filter} onChange={::this.props.onChange}/>
                         </div>
                     </div>
                     <div className="search-filter__fieldset">
@@ -120,14 +162,14 @@ export default class SerchFilter extends Component {
                             Ожидание, мин:
                         </div>
                         <div className="search-filter__field">
-
+                            <SearchRange type="waiting" filter={this.props.filter} onChange={::this.props.onChange}/>
                         </div>
 
                     </div>
                     <div className="search-filter__fieldset">
 
                         <div className="search-filter__field">
-                            <Checkbox label='Анализ воды' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.analiz} onChange={::this.handlerChangeCheckbox} attr={{'data-type': 'analiz'}} />
+                            <Checkbox label='Анализ воды' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.analiz} onChange={::this.handlerChangeCheckbox} attr={{'data-name': 'analiz'}} />
                         </div>
 
                     </div>

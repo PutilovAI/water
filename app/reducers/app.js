@@ -5,8 +5,10 @@ const initialState = {
     },
     searchFilter: {
         checkboxes: {
-            rodnik: true,
-            kolonka: false,
+            type: {
+                rodnik: true,
+                kolonka: false,
+            },
             analiz: false
         },
         ranges: {
@@ -21,7 +23,7 @@ const initialState = {
             id: 'water_source_1',
             title: "Моя водичка на дровах возле хутора близ Диканьки",
             address: "Сверд. обл., Камышловский р-н, д. Бабайка, ул. Советская, 15",
-            rodnik: true,
+            type: 'rodnik',
             typeText: "Родник",
             analiz: true,
             distance: "100",
@@ -33,7 +35,7 @@ const initialState = {
         {
             id: 'water_source_2',
             title: "Водоканал",
-            kolonka: true,
+            type: 'kolonka',
             typeText: "Колонка",
             distance: "110",
             pressure: "8",
@@ -44,7 +46,7 @@ const initialState = {
         {
             id: 'water_source_3',
             title: "По щучьему веленью",
-            rodnik: true,
+            type: 'rodnik',
             typeText: "Родник",
             distance: "80",
             pressure: "12",
@@ -55,7 +57,7 @@ const initialState = {
         {
             id: 'water_source_4',
             title: "Речка вонючка",
-            kolonka: true,
+            type: 'kolonka',
             typeText: "Колонка",
             distance: "60",
             pressure: "18",

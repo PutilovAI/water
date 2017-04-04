@@ -6,7 +6,16 @@ export default class SearchResults extends Component {
         var searchFilter = this.props.searchFilter,
             searchResults = this.props.items,
             sortType = this.props.offersFilter.value,
-            sortOrder = this.props.offersFilter.order;
+            sortOrder = this.props.offersFilter.order,
+            allTypesOff = true,
+            cbxTypes = searchFilter.checkboxes.type;
+
+
+        for (var key in cbxTypes){
+            if ( cbxTypes[key] ){
+                allTypesOff = false;
+            }
+        }
 
         var results = searchResults.sort( (a, b) => {
             if (sortOrder == 'decrement')
@@ -20,11 +29,34 @@ export default class SearchResults extends Component {
         results = results.map( (item, index) => {
             var isValidItem = true;
 
-            for (var key in searchFilter){
-                if ( searchFilter[key] && !item[key] ){
-                    isValidItem = false
+            if (!allTypesOff){
+                for (let key in cbxTypes){
+                    if ( !cbxTypes[key] && item.type == key ){
+                        isValidItem = false
+                    }
                 }
             }
+
+            if (isValidItem && searchFilter.checkboxes.analiz && !item.analiz){
+                isValidItem = false
+            }
+
+            if (isValidItem){
+                for (let key in searchFilter.ranges){
+                    let range = searchFilter.ranges[key],
+                        min   = range[0],
+                        max   = range[1],
+                        value = item[key] !== undefined ? parseFloat(item[key]) : null;
+
+                    if ( value !== null  ){
+                        if ( item[key] <= min || item[key] >= max ){
+                            isValidItem = false
+                        }
+                    }
+                }
+
+            }
+
 
             if (isValidItem){
                 return (

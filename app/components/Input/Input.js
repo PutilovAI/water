@@ -46,8 +46,8 @@ export class InputRange extends Component{
 
                 <label className='input__label'>
 
-                    <input type='number' className='input__field' onChange={::this.handlerOnChange} onFocus={::this.onFocus} onBlur={::this.onBlur} defaultValue={this.props.value} {...this.props.attr}></input>
-                    
+                    <input type='number' className='input__field' onChange={::this.handlerOnChange} onFocus={::this.onFocus} onBlur={::this.onBlur} value={this.props.value} {...this.props.attr}></input>
+
                     <div className='input__label-text'>{this.props.label}</div>
 
                 </label>
