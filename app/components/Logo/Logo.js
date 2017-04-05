@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom'
 
 
 export default class Logo extends Component{
     render(){
         return(
-            <a href="#" className="logo"></a>
+            <NavLink to='/' className="logo"/>
         )
     }
 }

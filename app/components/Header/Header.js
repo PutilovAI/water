@@ -1,5 +1,21 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom'
 import Logo from '../Logo/Logo'
+
+class NavItem extends Component{
+
+    render(){
+        return (
+            <div className="header__item">
+                <NavLink to={this.props.to} activeClassName="active" className="header__item-link">
+                    <span className="header__item-link-text">
+                        {this.props.text}
+                    </span>
+                </NavLink>
+            </div>
+        )
+    }
+}
 
 export default class Header extends Component {
 
@@ -11,27 +27,9 @@ export default class Header extends Component {
                         <div className="header__item header__item_logo">
                             <Logo />
                         </div>
-                        <div className="header__item active">
-                            <a href="#" className="header__item-link">
-                                <span className="header__item-link-text">
-                                    Источники
-                                </span>
-                            </a>
-                        </div>
-                        <div className="header__item">
-                            <a href="#" className="header__item-link">
-                                <span className="header__item-link-text">
-                                    Статьи
-                                </span>
-                            </a>
-                        </div>
-                        <div className="header__item">
-                            <a href="#" className="header__item-link">
-                                <span className="header__item-link-text">
-                                    Отдых
-                                </span>
-                            </a>
-                        </div>
+                        <NavItem to="/" text="Источники"/>
+                        <NavItem to="/articles" text="Статьи"/>
+                        <NavItem to="/recreation" text="Отдых"/>
                     </div>
                     <div className="header__col">
                         <div className="header__list">

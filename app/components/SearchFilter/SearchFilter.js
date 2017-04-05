@@ -30,15 +30,12 @@ class SearchRange extends Component{
             newValue  = oldFilter.ranges[type].value,
             targetValue = parseInt(e.target.value);
 
-
         if (direction == 'from'){
             newValue[0] = Math.max(targetValue, oldFilter.ranges[type].limit[0]);
-
 
         } else {
             newValue[1] = Math.min(targetValue, oldFilter.ranges[type].limit[1])
         }
-
 
         newFilter.ranges[type].value = newValue;
 

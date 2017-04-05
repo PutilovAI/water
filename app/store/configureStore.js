@@ -1,14 +1,18 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-// import { closePopup } from '../middlewares/closePopup'
+import createHistory from 'history/createBrowserHistory'
+import { routerMiddleware } from 'react-router-redux'
 import rootReducer from '../reducers'
 
 export default function configureStore() {
+    var history = createHistory();
+    console.log(history)
   const store = compose(
     applyMiddleware(thunkMiddleware),
-    applyMiddleware(createLogger({collapsed:true}))
-    // applyMiddleware(closePopup)
+    applyMiddleware(createLogger({collapsed:true})),
+    applyMiddleware(routerMiddleware( history ))
+
   )(createStore)(rootReducer)
 
   if (module.hot) {
@@ -18,6 +22,7 @@ export default function configureStore() {
       store.replaceReducer(nextRootReducer)
     });
   }
+  console.log(history)
 
   return store
 }

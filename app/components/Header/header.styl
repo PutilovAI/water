@@ -22,18 +22,19 @@
         &:hover
             color $base-fc
             background-color: lighten($color-main, 70%)
+
+        &.active
+            position: relative;
+            &:after
+                content ''
+                height 12px
+                width 100%
+                position: absolute;
+                bottom 0
+                left 0
+                background url(img/header-item-pattern.svg) repeat-x
+                background-size auto 100%
+                background-position bottom center
     &__item
         &_logo
             margin-right: 15px
-    &__item.active
-        position: relative;
-        &:after
-            content ''
-            height 12px
-            width 100%
-            position: absolute;
-            bottom 0
-            left 0
-            background url(img/header-item-pattern.svg) repeat-x
-            background-size auto 100%
-            background-position bottom center

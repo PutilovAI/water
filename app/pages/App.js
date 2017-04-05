@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import Header from '../Header/Header'
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
-import Footer from '../Footer/Footer'
-import SearchResults from '../SearchResults/SearchResults'
-import SearchFilter from '../SearchFilter/SearchFilter'
-import OffersFilter from '../OffersFilter/OffersFilter';
+import Header from '../components/Header/Header'
+import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
+import Footer from '../components/Footer/Footer'
+import SearchResults from '../components/SearchResults/SearchResults'
+import SearchFilter from '../components/SearchFilter/SearchFilter'
+import OffersFilter from '../components/OffersFilter/OffersFilter';
 
-import * as AppActions from '../../actions/AppActions'
+import * as AppActions from '../actions/AppActions'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
