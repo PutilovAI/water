@@ -7,15 +7,18 @@ class SearchRange extends Component{
     onChangeSlider(valuesArray){
 
         var type = this.props.type,
-            oldFilter = this.props.filter;
+            oldFilter = this.props.filter,
+            newFilter = {...oldFilter},
+            newValue  = oldFilter.ranges[type].value;
 
-        var newFilter = Object.assign({}, oldFilter,
-            {
-                ranges: Object.assign({}, oldFilter.ranges, {
-                    [type]: valuesArray
-                })
+        if (newValue[0] == newValue[1]) {
+            newValue[1] += 1
+        }
 
-            } );
+        newValue[0] = Math.max(newValue[0], oldFilter.ranges[type].limit[0]);
+        newValue[1] = Math.min(newValue[1], oldFilter.ranges[type].limit[1]);
+
+        newFilter.ranges[type].value = valuesArray;
 
         this.props.onChange.call(this, newFilter);
     }
@@ -24,27 +27,33 @@ class SearchRange extends Component{
             oldFilter = this.props.filter,
             newFilter = {...oldFilter},
             direction = e.target.dataset.direction,
-            newValue = oldFilter.ranges[type];
+            newValue  = oldFilter.ranges[type].value,
+            targetValue = parseInt(e.target.value);
 
 
         if (direction == 'from'){
-            newValue[0] = parseInt(e.target.value)
+            newValue[0] = Math.max(targetValue, oldFilter.ranges[type].limit[0]);
+
+
         } else {
-            newValue[1] = parseInt(e.target.value)
+            newValue[1] = Math.min(targetValue, oldFilter.ranges[type].limit[1])
         }
 
-        newFilter.ranges[type] = newValue;
+
+        newFilter.ranges[type].value = newValue;
 
         this.props.onChange.call(this, newFilter);
     }
     render(){
         var self = this,
             type = self.props.type,
-            valueFrom = this.props.filter.ranges[type][0],
-            valueTo   = this.props.filter.ranges[type][1];
+            valueFrom = this.props.filter.ranges[type].value[0],
+            valueTo   = this.props.filter.ranges[type].value[1],
+            limitMin  = this.props.filter.ranges[type].limit[0],
+            limitMax  = this.props.filter.ranges[type].limit[1];
         return (
             <div className="search-filter__slider">
-                <Slider  max={200} min={0} value={[valueFrom, valueTo]} withBars onChange={::this.onChangeSlider} />
+                <Slider  min={limitMin} max={limitMax} value={[valueFrom, valueTo]} withBars onChange={::this.onChangeSlider} />
 
                 <div className="search-filter__slider-inputs">
                     <InputRange value={valueFrom} label="от" onChange={::this.onChangeInput} attr={{'data-direction': 'from'}}/>
@@ -97,7 +106,6 @@ export default class SerchFilter extends Component {
                 newFilter.checkboxes[key] = false
 
             } else if ( typeof group == 'object'){
-                console.log( key)
                 newFilter.checkboxes[key] = {};
 
                 for (let innerkey in group){
@@ -125,20 +133,13 @@ export default class SerchFilter extends Component {
 
                         </div>
                     </div>
-                    <div className="search-filter__fieldset">
-                        <div className="search-filter__fieldset-label">
-                            Рейтинг, балл:
-                        </div>
-                        <div className="search-filter__field">
 
-                        </div>
-                    </div>
                     <div className="search-filter__fieldset">
                         <div className="search-filter__fieldset-label">
                             Рейтинг, балл:
                         </div>
                         <div className="search-filter__field">
-                            <SearchRange type="rating" filter={this.props.filter} onChange={::this.props.onChange}/>
+                            <SearchRange limit={[0,10]} type="rating" filter={this.props.filter} onChange={::this.props.onChange}/>
                         </div>
                     </div>
                     <div className="search-filter__fieldset">
@@ -146,7 +147,7 @@ export default class SerchFilter extends Component {
                             Расстояние от меня, км:
                         </div>
                         <div className="search-filter__field">
-                            <SearchRange type="distance" filter={this.props.filter} onChange={::this.props.onChange}/>
+                            <SearchRange limit={[0,9999]} type="distance" filter={this.props.filter} onChange={::this.props.onChange}/>
                         </div>
                     </div>
                     <div className="search-filter__fieldset">
@@ -154,7 +155,7 @@ export default class SerchFilter extends Component {
                             Напор воды, л/мин:
                         </div>
                         <div className="search-filter__field">
-                            <SearchRange type="pressure" filter={this.props.filter} onChange={::this.props.onChange}/>
+                            <SearchRange limit={[0,30]} type="pressure" filter={this.props.filter} onChange={::this.props.onChange}/>
                         </div>
                     </div>
                     <div className="search-filter__fieldset">
@@ -162,7 +163,7 @@ export default class SerchFilter extends Component {
                             Ожидание, мин:
                         </div>
                         <div className="search-filter__field">
-                            <SearchRange type="waiting" filter={this.props.filter} onChange={::this.props.onChange}/>
+                            <SearchRange limit={[0,60]} type="waiting" filter={this.props.filter} onChange={::this.props.onChange}/>
                         </div>
 
                     </div>

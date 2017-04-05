@@ -44,8 +44,8 @@ export default class SearchResults extends Component {
             if (isValidItem){
                 for (let key in searchFilter.ranges){
                     let range = searchFilter.ranges[key],
-                        min   = range[0],
-                        max   = range[1],
+                        min   = range.value[0],
+                        max   = range.value[1],
                         value = item[key] !== undefined ? parseFloat(item[key]) : null;
 
                     if ( value !== null  ){

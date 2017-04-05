@@ -58,7 +58,10 @@ export class App extends Component {
 
                                     </main>
                                     <aside className="search__content-aside">
-                                        <SearchFilter filter={this.props.searchFilter} onChange={::this.props.actions.searchFiltering}/>
+                                        <div className="search__content-aside-inner">
+                                            <SearchFilter filter={this.props.searchFilter} onChange={::this.props.actions.searchFiltering}/>
+                                        </div>
+
                                     </aside>
 
                                 </div>
