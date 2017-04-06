@@ -27,7 +27,7 @@ export default class Header extends Component {
                         <div className="header__item header__item_logo">
                             <Logo />
                         </div>
-                        <NavItem to="/" text="Источники"/>
+                        <NavItem to="/search" text="Источники"/>
                         <NavItem to="/articles" text="Статьи"/>
                         <NavItem to="/recreation" text="Отдых"/>
                     </div>

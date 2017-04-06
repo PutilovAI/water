@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import OfferCard from '../OfferCard/OfferCard'
+import { NavLink } from 'react-router-dom'
 
 export default class SearchResults extends Component {
     getResults(){
@@ -61,7 +62,10 @@ export default class SearchResults extends Component {
             if (isValidItem){
                 return (
                     <div className="search-results__list-item" key={index}>
-                        <OfferCard  {...item} />
+                        <NavLink to={`/source/${item.id}`}>
+                            <OfferCard  {...item} />
+                        </NavLink>
+
                     </div>
                 )
             }

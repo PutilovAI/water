@@ -7,7 +7,6 @@ import rootReducer from '../reducers'
 
 export default function configureStore() {
     var history = createHistory();
-    console.log(history)
   const store = compose(
     applyMiddleware(thunkMiddleware),
     applyMiddleware(createLogger({collapsed:true})),
@@ -22,7 +21,6 @@ export default function configureStore() {
       store.replaceReducer(nextRootReducer)
     });
   }
-  console.log(history)
 
   return store
 }
