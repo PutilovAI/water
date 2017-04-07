@@ -12,11 +12,16 @@ export class PageSource extends Component {
 
     componentWillMount(){
         var id = this.props.match.params.id
-        this.action.fetchItem(id)
-
+        this.props.actions.fetchItem(id)
     }
     render() {
-
+        var ratingMod = 'low',
+            rating = parseFloat(this.props.item.rating);
+        if (rating >= 4 && rating < 8 ){
+            ratingMod = 'mid'
+        } else if (rating >= 8){
+            ratingMod = 'high'
+        }
         return (
 
             <div className="wrapper__page">
@@ -43,12 +48,32 @@ export class PageSource extends Component {
                                             <img src={this.props.item.img}></img>
                                         </div>
 
-
                                     </main>
 
                                     <aside className="page__col-aside">
                                         <div className="page__col-aside-inner">
-
+                                            <ul className="source-props">
+                                                <li className="source-props__item source-props__item_rating">
+                                                    <span className="source-props__name">Рейтинг:</span>
+                                                    <b className={'source-props__value source-props__rating source-props__rating_' +ratingMod}>{this.props.item.rating}</b>
+                                                </li>
+                                                <li className="source-props__item">
+                                                    <span className="source-props__name">Тип источника:</span>
+                                                    <b className="source-props__value">{this.props.item.typeText}</b>
+                                                </li>
+                                                <li className="source-props__item">
+                                                    <span className="source-props__name">Расстояние от меня:</span>
+                                                    <b className="source-props__value">{this.props.item.distance} км</b>
+                                                </li>
+                                                <li className="source-props__item">
+                                                    <span className="source-props__name">Напор воды:</span>
+                                                    <b className="source-props__value">{this.props.item.pressure} л/мин</b>
+                                                </li>
+                                                <li className="source-props__item">
+                                                    <span className="source-props__name">Анализ воды:</span>
+                                                    <b className="source-props__value">{(this.props.item.analiz ? 'есть': 'нет')}</b>
+                                                </li>
+                                            </ul>
                                         </div>
 
                                     </aside>

@@ -62,7 +62,7 @@ export default class SearchResults extends Component {
             if (isValidItem){
                 return (
                     <div className="search-results__list-item" key={index}>
-                        <NavLink to={`/source/${item.id}`}>
+                        <NavLink to={`/source/${item.id}`} className="search-results__list-item-link">
                             <OfferCard  {...item} />
                         </NavLink>
 

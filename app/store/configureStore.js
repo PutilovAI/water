@@ -7,7 +7,7 @@ import rootReducer from '../reducers'
 
 export default function configureStore() {
     var history = createHistory();
-  const store = compose(
+    const store = compose(
     applyMiddleware(thunkMiddleware),
     applyMiddleware(createLogger({collapsed:true})),
     applyMiddleware(routerMiddleware( history ))

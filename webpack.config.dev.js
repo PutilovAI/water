@@ -11,6 +11,7 @@ module.exports = {
         'eventsource-polyfill',
         // listen to code updates emitted by hot middleware:
         'webpack-hot-middleware/client',
+        'isomorphic-fetch',
 
         './app/index.js'
     ],

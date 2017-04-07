@@ -6,10 +6,16 @@ export function receivedSource(item){
 }
 export function fetchItem(id){
     return function(dispatch){
-        return fetch(`/static/data/sources.json`)
+        return fetch(`/dist/static/data/sources.json`)
             .then(responce => responce.json())
-            .then(json => {
-                console.log(json)
+            .then(data => {
+
+                data.items.forEach( item =>{
+                    if (item.id == id){
+                        dispatch(receivedSource(item));
+                        return false;
+                    }
+                })
             })
     }
 }
