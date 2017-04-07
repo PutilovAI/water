@@ -24,73 +24,58 @@ export class PageSource extends Component {
         }
         return (
 
-            <div className="wrapper__page">
+            <section className="section">
+                <div className="container">
+                    <Breadcrumbs />
 
-                <div className='wrapper__page-top'>
-                    <Header />
-                    <div className="wrapper__content">
-                        <section className="section">
-                            <div className="container">
-                                <Breadcrumbs />
+                    <h1 className="section__title section__title_main">
+                        {this.props.item.title}
+                    </h1>
 
-                                <h1 className="section__title section__title_main">
-                                    {this.props.item.title}
-                                </h1>
-
-                                <p>{this.props.item.address}</p>
+                    <p>{this.props.item.address}</p>
 
 
-                                <div className="page__row">
+                    <div className="page__row">
 
-                                    <main className="page__col-main">
+                        <main className="page__col-main">
 
-                                        <div>
-                                            <img src={this.props.item.img}></img>
-                                        </div>
-
-                                    </main>
-
-                                    <aside className="page__col-aside">
-                                        <div className="page__col-aside-inner">
-                                            <ul className="source-props">
-                                                <li className="source-props__item source-props__item_rating">
-                                                    <span className="source-props__name">Рейтинг:</span>
-                                                    <b className={'source-props__value source-props__rating source-props__rating_' +ratingMod}>{this.props.item.rating}</b>
-                                                </li>
-                                                <li className="source-props__item">
-                                                    <span className="source-props__name">Тип источника:</span>
-                                                    <b className="source-props__value">{this.props.item.typeText}</b>
-                                                </li>
-                                                <li className="source-props__item">
-                                                    <span className="source-props__name">Расстояние от меня:</span>
-                                                    <b className="source-props__value">{this.props.item.distance} км</b>
-                                                </li>
-                                                <li className="source-props__item">
-                                                    <span className="source-props__name">Напор воды:</span>
-                                                    <b className="source-props__value">{this.props.item.pressure} л/мин</b>
-                                                </li>
-                                                <li className="source-props__item">
-                                                    <span className="source-props__name">Анализ воды:</span>
-                                                    <b className="source-props__value">{(this.props.item.analiz ? 'есть': 'нет')}</b>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                    </aside>
-
-                                </div>
+                            <div>
+                                <img src={this.props.item.img}></img>
                             </div>
-                        </section>
+
+                        </main>
+
+                        <aside className="page__col-aside">
+                            <div className="page__col-aside-inner">
+                                <ul className="source-props">
+                                    <li className="source-props__item source-props__item_rating">
+                                        <span className="source-props__name">Рейтинг:</span>
+                                        <b className={'source-props__value source-props__rating source-props__rating_' +ratingMod}>{this.props.item.rating}</b>
+                                    </li>
+                                    <li className="source-props__item">
+                                        <span className="source-props__name">Тип источника:</span>
+                                        <b className="source-props__value">{this.props.item.typeText}</b>
+                                    </li>
+                                    <li className="source-props__item">
+                                        <span className="source-props__name">Расстояние от меня:</span>
+                                        <b className="source-props__value">{this.props.item.distance} км</b>
+                                    </li>
+                                    <li className="source-props__item">
+                                        <span className="source-props__name">Напор воды:</span>
+                                        <b className="source-props__value">{this.props.item.pressure} л/мин</b>
+                                    </li>
+                                    <li className="source-props__item">
+                                        <span className="source-props__name">Анализ воды:</span>
+                                        <b className="source-props__value">{(this.props.item.analiz ? 'есть': 'нет')}</b>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </aside>
 
                     </div>
-
                 </div>
-
-                <div className='wrapper__page-bot'>
-                    <Footer />
-                </div>
-
-            </div>
+            </section>
         );
     }
 }

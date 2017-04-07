@@ -14,36 +14,21 @@ export class PageMain extends Component {
 
         return (
 
-            <div className="wrapper__page">
+            <section className="section">
+                <div className="container">
+                    <Breadcrumbs />
+                    <h1 className="section__title section__title_main">
+                        Главная
+                    </h1>
 
-                <div className='wrapper__page-top'>
-                    <Header />
-                    <div className="wrapper__content search">
-                        <section className="section">
-                            <div className="container">
-                                <Breadcrumbs />
-                                <h1 className="section__title section__title_main">
-                                    Главная
-                                </h1>
-
-                                <h4 className="">
-                                    Текст
-                                </h4>
+                    <h4 className="">
+                        Текст
+                    </h4>
 
 
-
-                            </div>
-                        </section>
-
-                    </div>
 
                 </div>
-
-                <div className='wrapper__page-bot'>
-                    <Footer />
-                </div>
-
-            </div>
+            </section>
         );
     }
 }

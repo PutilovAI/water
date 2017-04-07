@@ -3,7 +3,8 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
-import { Route } from 'react-router'
+import { Route, Switch } from 'react-router'
+
 import { ConnectedRouter } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'
 const history = createHistory()
@@ -11,6 +12,8 @@ const history = createHistory()
 import configureStore from './store/configureStore'
 const store = configureStore()
 
+import __main from './layouts/__main';
+import App from './layouts/App';
 import PageMain from './pages/PageMain';
 import PageSearch from './pages/PageSearch';
 import PageSource from './pages/PageSource';
@@ -21,13 +24,14 @@ render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
             <div>
-                <Route exact path='/' component={PageMain}/>
-                <Route path='/search' component={PageSearch}/>
-                <Route exact path='/source' component={PageSearch}/>
-                <Route strict path='/source/:id' component={PageSource}/>
-
-
+                <Switch>
+                    <__main exact path='/' component={PageMain}/>
+                    <__main path='/search' component={PageSearch}/>
+                    <__main exact path='/source' component={PageSearch}/>
+                    <__main strict path='/source/:id' component={PageSource}/>
+                </Switch>
             </div>
+
         </ConnectedRouter>
     </Provider>,
 
