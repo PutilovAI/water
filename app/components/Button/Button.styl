@@ -1,0 +1,78 @@
+.button
+    padding 0 1.3em
+    line-height: 38px
+    height 40px
+    background-color $color-second
+    cursor pointer
+    border 1px solid $color-second
+    border-radius: $button-border-radius
+    display inline-block
+    vertical-align: middle
+    text-decoration none
+    color #fff
+    text-align center
+    transition all 0.2s linear
+    outline none
+    user-select none
+    font-family: $base-ff-regular
+    min-width: 140px
+    text-align: center
+    appearance none
+
+    &:hover
+        color #fff
+        background-color $color-second-hover
+        border-color $color-second-hover
+
+    &_cancel
+        background-color #eaeaea
+        border-color #eaeaea
+        color $base-fc
+        &:hover
+            color $base-fc
+            background-color lighten(#eaeaea, 20%)
+            border-color  lighten(#eaeaea, 20%)
+
+    &_nobg
+        background: rgba(#fff, 0)
+        color: $base-fc
+        &:hover
+            color #fff
+            background-color $color-main-hover
+            border-color $color-main-hover
+
+    &_icon
+        position: relative
+        margin-left 40px
+        border-radius 0 $button-border-radius $button-border-radius 0
+        &:before
+            content ''
+            position: absolute
+            border-radius $button-border-radius 0 0 $button-border-radius
+            left -40px
+            top 0
+            height 40px
+            width 40px
+            background-color $color-second
+            border 1px solid $color-second
+            border-right-color darken($color-second, 10%)
+            transition all 0.2s linear
+        &:after
+            content ''
+            position: absolute
+            pos-center(left: -20px)
+        &:hover
+            &:before
+                background-color $color-second-hover
+                border-color $color-second-hover
+                border-right-color $color-second
+
+
+    &_icon-add
+        padding 0 20px
+        border none
+        margin-left 50px
+
+        &:after
+            content '+'
+            font-size: 21px

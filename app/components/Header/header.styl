@@ -11,6 +11,7 @@
         align-items: center;
     &__col
         display flex
+        align-items: center;
     &__item-link
         height 60px
         line-height: 58px
@@ -35,6 +36,26 @@
                 background url(img/header-item-pattern.svg) repeat-x
                 background-size auto 100%
                 background-position bottom center
+    &__link-user-bar
+        color $base-fc
+        font-size: 16px
+        &_login
+            position: relative;
+            padding-left: 35px
+            &:before
+                icon(icon_user)
+                width 30px
+                text-align: center
+                left 0
+                position: absolute;
+                font-size: 18px
+                opacity: 0.6
+
+
     &__item
         &_logo
             margin-right: 15px
+        &_user-bar
+            margin-right 20px
+            &:last-child
+                margin-right: 0

@@ -32,13 +32,11 @@ export default class Header extends Component {
                         <NavItem to="/recreation" text="Отдых"/>
                     </div>
                     <div className="header__col">
-                        <div className="header__list">
-                            <div className="header__list-item">
-
-                                <a href="#" className="header__list-item-link">
-                                    Раздел сайта 2
-                                </a>
-                            </div>
+                        <div className="header__item header__item_user-bar">
+                            <NavLink to="/add" className="button button_icon button_icon-add">Добавить источник</NavLink>
+                        </div>
+                        <div className="header__item header__item_user-bar">
+                            <NavLink to="/login" className="header__link-user-bar header__link-user-bar_login">Войти</NavLink>
                         </div>
                     </div>
                 </div>

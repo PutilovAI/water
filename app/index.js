@@ -17,18 +17,20 @@ import App from './layouts/App';
 import PageMain from './pages/PageMain';
 import PageSearch from './pages/PageSearch';
 import PageSource from './pages/PageSource';
+import PageAdd from './pages/PageAdd';
 
 import './assets/style/main.styl';
 
 render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <div>
+            <div className="wrapper__inner">
                 <Switch>
                     <__main exact path='/' component={PageMain}/>
                     <__main path='/search' component={PageSearch}/>
                     <__main exact path='/source' component={PageSearch}/>
                     <__main strict path='/source/:id' component={PageSource}/>
+                    <__main path='/add' component={PageAdd}/>
                 </Switch>
             </div>
 
