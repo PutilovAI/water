@@ -1,4 +1,4 @@
-#!/Users/pai1989/Documents/projects/temp/water/django/env/bin/python3
+#!/Users/admin/Documents/projects/water/django/env/bin/python3
 from django.core import management
 
 if __name__ == "__main__":
