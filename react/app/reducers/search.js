@@ -14,19 +14,19 @@ const initialState = {
         ranges: {
             distance: {
                 limit: [0, 3000],
-                value: [0, 2000]
+                value: [0, 3000]
             },
             rating: {
                 limit: [0, 10],
-                value: [3, 8]
+                value: [0, 10]
             },
             pressure: {
                 limit: [0, 30],
-                value: [5, 30]
+                value: [0, 30]
             },
             waiting: {
                 limit: [0, 60],
-                value: [0, 5]
+                value: [0, 60]
             },
         }
     },

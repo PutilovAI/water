@@ -27,7 +27,7 @@ render(
             <div className="wrapper__inner">
                 <Switch>
                     <__main exact path='/' component={PageMain}/>
-                    <__main path='/search' component={PageSearch}/>
+                    <__main exact path='/search' component={PageSearch}/>
                     <__main exact path='/source' component={PageSearch}/>
                     <__main strict path='/source/:id' component={PageSource}/>
                     <__main path='/add' component={PageAdd}/>

@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+
+import createHistory from 'history/createBrowserHistory'
+const history = createHistory()
+
 import Header from '../components/Header/Header'
 import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
 import Footer from '../components/Footer/Footer'
@@ -12,9 +16,51 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 export class PageSearch extends Component {
+
+    strToFilter(str){
+        let curFilter = this.props.searchFilter;
+        let newFilter = {};
+
+        newFilter = Object.assign({}, curFilter, newFilter)
+
+        for (let key in curFilter.ranges){
+
+            let min = str.match(new RegExp(key + "_min=(\\d+)"))
+            let max = str.match(new RegExp(key + "_max=(\\d+)"))
+
+            if (min && min[1] !== undefined) newFilter.ranges[key].value[0] = parseFloat(min[1])
+            if (max && max[1] !== undefined) newFilter.ranges[key].value[1] = parseFloat(max[1])
+
+        }
+
+        return newFilter;
+
+    }
+
+
     componentWillMount(){
-        var filter = this.props.searchFilter;
-        this.props.actions.fetchSearchResults(filter)
+        let historySearch = history.location.search;
+        let historyState = history.location.state;
+        let newFilter = {};
+
+        if (historyState && historyState.filter){
+            newFilter = historyState.filter
+            console.log(1)
+
+        } else if(historySearch){
+            newFilter = historySearch
+            this.strToFilter(newFilter)
+            console.log(2)
+        } else {
+            newFilter = this.props.searchFilter;
+            console.log(3)
+        }
+        console.log(`newFilter = ${newFilter}`)
+        //console.log(`getFilter = ${getFilter}`)
+
+
+
+        this.props.actions.fetchSearchResults(newFilter)
     }
     render() {
 

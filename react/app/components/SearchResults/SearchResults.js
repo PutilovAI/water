@@ -30,33 +30,33 @@ export default class SearchResults extends Component {
         results = results.map( (item, index) => {
             var isValidItem = true;
 
-            if (!allTypesOff){
-                for (let key in cbxTypes){
-                    if ( !cbxTypes[key] && item.type == key ){
-                        isValidItem = false
-                    }
-                }
-            }
-
-            if (isValidItem && searchFilter.checkboxes.analiz && !item.analiz){
-                isValidItem = false
-            }
-
-            if (isValidItem){
-                for (let key in searchFilter.ranges){
-                    let range = searchFilter.ranges[key],
-                        min   = range.value[0],
-                        max   = range.value[1],
-                        value = item[key] !== undefined ? parseFloat(item[key]) : null;
-
-                    if ( value !== null  ){
-                        if ( item[key] <= min || item[key] >= max ){
-                            isValidItem = false
-                        }
-                    }
-                }
-
-            }
+            // if (!allTypesOff){
+            //     for (let key in cbxTypes){
+            //         if ( !cbxTypes[key] && item.type == key ){
+            //             isValidItem = false
+            //         }
+            //     }
+            // }
+            //
+            // if (isValidItem && searchFilter.checkboxes.analiz && !item.analiz){
+            //     isValidItem = false
+            // }
+            //
+            // if (isValidItem){
+            //     for (let key in searchFilter.ranges){
+            //         let range = searchFilter.ranges[key],
+            //             min   = range.value[0],
+            //             max   = range.value[1],
+            //             value = item[key] !== undefined ? parseFloat(item[key]) : null;
+            //
+            //         if ( value !== null  ){
+            //             if ( item[key] <= min || item[key] >= max ){
+            //                 isValidItem = false
+            //             }
+            //         }
+            //     }
+            //
+            // }
 
 
             if (isValidItem){

@@ -16,10 +16,10 @@ class Source(models.Model):
     distance = models.PositiveIntegerField()
     pressure = models.PositiveIntegerField()
     rating   = models.FloatField()
+    waiting   = models.PositiveIntegerField()
     visitors = models.PositiveIntegerField()
     # code     = models.TextField()
     analiz   = models.BooleanField(default=False)
-    # language = models.CharField(choices=LANGUAGE_CHOICES, default='python', max_length=100)
 
 
     class Meta:
