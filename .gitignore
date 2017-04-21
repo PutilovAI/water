@@ -2,8 +2,8 @@ node_modules
 /node_modules
 node_modules/**/*
 .DS_Store
-/dist
-/dist/**/*
+/react/dist
+/react/dist/**/*
 /django/env
 /django/env/*
 /django/env/**/*

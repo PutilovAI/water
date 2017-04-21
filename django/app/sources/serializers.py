@@ -4,4 +4,11 @@ from rest_framework import serializers
 class SourceSingleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Source
-        fields = ('id', 'title', 'address', '_type', 'distance')
+        exclude = ('created',)
+
+        # fields = ('id', 'title', 'address', 'type', 'distance')
+# class SourceSingleSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Source
+#         fields = ('__all__')
+#         # fields = ('id', 'title', 'address', 'type', 'distance')
