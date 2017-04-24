@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import createHistory from 'history/createBrowserHistory'
 const history = createHistory()
 
+let dcopy =  require('deep-copy')
+
 import Header from '../components/Header/Header'
 import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
 import Footer from '../components/Footer/Footer'
@@ -19,11 +21,9 @@ export class PageSearch extends Component {
 
     strToFilter(str){
         let curFilter = this.props.searchFilter;
-        let newFilter = {};
+        let newFilter = dcopy(curFilter);
 
-        newFilter = Object.assign({}, curFilter, newFilter)
-
-        for (let key in curFilter.ranges){
+        for (let key in newFilter.ranges){
 
             let min = str.match(new RegExp(key + "_min=(\\d+)"))
             let max = str.match(new RegExp(key + "_max=(\\d+)"))
@@ -31,6 +31,22 @@ export class PageSearch extends Component {
             if (min && min[1] !== undefined) newFilter.ranges[key].value[0] = parseFloat(min[1])
             if (max && max[1] !== undefined) newFilter.ranges[key].value[1] = parseFloat(max[1])
 
+        }
+
+        for (let key in newFilter.checkboxes){
+            let cxb = newFilter.checkboxes[key]
+
+            if (typeof cxb == 'object'){
+                for (let keyInner in cxb){
+
+                }
+            } else {
+                let resMatch = str.match(new RegExp(key + "=(true|false)(?:&|$)", "i"))
+                if (resMatch && resMatch[1] !== undefined)
+                    newFilter.checkboxes[key] = resMatch[1]
+
+                console.log(resMatch)
+            }
         }
 
         return newFilter;
@@ -44,15 +60,16 @@ export class PageSearch extends Component {
         let newFilter = {};
 
         if (historyState && historyState.filter){
-            newFilter = historyState.filter
+            newFilter = historyState.filter//Object
             console.log(1)
 
         } else if(historySearch){
-            newFilter = historySearch
-            this.strToFilter(newFilter)
+            newFilter = historySearch//string
+            this.props.actions.searchFiltering(this.strToFilter(newFilter))
+
             console.log(2)
         } else {
-            newFilter = this.props.searchFilter;
+            newFilter = this.props.searchFilter;//Object
             console.log(3)
         }
         console.log(`newFilter = ${newFilter}`)

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 import django_filters
-from django_filters import NumberFilter
+from django_filters import NumberFilter, ModelMultipleChoiceFilter, MultipleChoiceFilter
 
 from django_filters.rest_framework import (DjangoFilterBackend, FilterSet)
 
@@ -10,7 +10,13 @@ from rest_framework import viewsets
 from .serializers import SourceSingleSerializer
 from .models import Source
 
+def types(request):
+    print(request)
+    # type = request.source.type
+    # return source.type_set.all()
+
 class SourceFilter(FilterSet):
+    type         = MultipleChoiceFilter(choices=Source.TYPES)
     distance_min = NumberFilter(name="distance", lookup_expr='gte')
     distance_max = NumberFilter(name="distance", lookup_expr='lte')
     rating_min   = NumberFilter(name="rating", lookup_expr='gte')

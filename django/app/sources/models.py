@@ -12,7 +12,7 @@ class Source(models.Model):
     created  = models.DateTimeField(auto_now_add=True)
     title    = models.CharField(max_length=100, blank=True, default='')
     address  = models.CharField(max_length=200)
-    type   = models.CharField(max_length=100, choices=TYPES, default='rodnik', verbose_name='Тип источника')
+    type     = models.CharField(max_length=100, choices=TYPES, default='rodnik', verbose_name='Тип источника')
     distance = models.PositiveIntegerField()
     pressure = models.PositiveIntegerField()
     rating   = models.FloatField()

@@ -6,7 +6,7 @@ const initialState = {
     searchFilter: {
         checkboxes: {
             type: {
-                rodnik: true,
+                rodnik: false,
                 kolonka: false,
             },
             analiz: false
