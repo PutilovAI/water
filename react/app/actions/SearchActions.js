@@ -36,7 +36,31 @@ export function recievedSearchResult(results){
         results: results
     }
 }
+function filterToStr(filter){
+    var str = '?';
 
+    for (let key in filter.checkboxes){
+        let cxb = filter.checkboxes[key]
+
+        if (typeof cxb == 'object'){
+            for (let keyInner in cxb){
+                if (filter.checkboxes[key][keyInner] == true)
+                    str += `${key}=${keyInner}&`
+            }
+        } else {
+            if (filter.checkboxes[key] == true)
+                str += `${key}=true&`
+        }
+    }
+
+    for (let key in filter.ranges){
+        let range = filter.ranges[key];
+        str += `${key}_min=${range.value[0]}&${key}_max=${range.value[1]}&`
+    }
+
+    str = str.replace(/\&$/g, '')
+    return str;
+}
 export function fetchSearchResults(filter){
 
     var getFilter = '';
@@ -44,18 +68,8 @@ export function fetchSearchResults(filter){
     if (typeof filter == 'string'){
         getFilter = filter
     } else {
-        for (let key in filter.ranges){
-            let range = filter.ranges[key];
-            getFilter += `?${key}_min=${range.value[0]}&${key}_max=${range.value[1]}&`
-        }
-        getFilter = getFilter.replace(/\&$/g, '')
+        getFilter = filterToStr(filter);
     }
-    // console.log(`filter = ${filter}`)
-    // console.log(`getFilter = ${getFilter}`)
-    // if (typeof filter !== 'String')
-    //     history.push(getFilter, {filter: filter});
-    // else
-    //     history.push(getFilter);
 
     return function(dispatch){
         return fetch(`${SERVER_URL}/sources/${getFilter}`,
@@ -70,14 +84,76 @@ export function fetchSearchResults(filter){
             })
             .then(responce => responce.json())
             .then(data => {
-                //console.log(data)
-                // if (typeof filter !== 'String')
-                //     history.push(getFilter, {filter: filter});
-                // else
-                //     history.push(getFilter);
-                // console.log('data')
-                // console.log(data)
+                if (typeof filter !== 'string')
+                    history.push(getFilter, {filter: filter});
+                else
+                    history.push(getFilter);
+
                 dispatch( recievedSearchResult(data) )
+            })
+    }
+}
+
+export function fetchSearchFilterLimits(filter){
+
+    return function(dispatch){
+        return fetch(`${SERVER_URL}/test/`,
+            {
+                method: 'get',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'x-csrftoken': getCookie('csrftoken')
+                },
+                credentials: 'include'
+            })
+            .then(responce => responce.json())
+            .then(data => {
+                var limits = {}
+
+                for (let key in data){
+                    let name = key.match(/(.+)__/i);
+                    let min = 0
+                    let max = 0
+
+                    if(name){
+                        name = name[1]
+                        if (!limits[name])
+                            limits[name] = {min, max};
+
+                        min = data[name+'__min']
+                        max = data[name+'__max']
+                        if (min)
+                            limits[name].min = parseInt(min)
+                        if (max)
+                            limits[name].max = parseInt(max)
+                    }
+
+                }
+
+                for (let key in filter.ranges){
+
+                    let max = limits[key].max
+                    let min = limits[key].min
+
+                    if (min !== undefined){
+                        filter.ranges[key].limit[0] = min
+
+                        if(!filter.options.initialed || filter.ranges[key].value[0] < min ){
+                            filter.ranges[key].value[0] = min
+                        }
+                    }
+
+                    if (max !== undefined){
+                        filter.ranges[key].limit[1] = max
+                        if (!filter.options.initialed || filter.ranges[key].value[1] > max)
+                            filter.ranges[key].value[1] = max
+                    }
+                }
+
+                filter.options.initialed = true;
+
+                dispatch( searchFiltering(filter) )
             })
     }
 }

@@ -23,7 +23,8 @@ router = routers.DefaultRouter()
 router.register(r'sources', views.SourceViewSet)
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/test/', views.SourceFilterLimits.as_view())
 ]

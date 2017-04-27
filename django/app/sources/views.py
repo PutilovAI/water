@@ -3,17 +3,23 @@ from __future__ import unicode_literals
 
 import django_filters
 from django_filters import NumberFilter, ModelMultipleChoiceFilter, MultipleChoiceFilter
-
 from django_filters.rest_framework import (DjangoFilterBackend, FilterSet)
 
+from django.db.models import Max, Min
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 from rest_framework import viewsets
-from .serializers import SourceSingleSerializer
+from .serializers import SourceSerializer
 from .models import Source
 
-def types(request):
-    print(request)
-    # type = request.source.type
-    # return source.type_set.all()
+
+class SourceFilterLimits(APIView):
+
+    def get(self, request, *args, **kwargs):
+        limits = Source.objects.aggregate(Max('distance'), Min('distance'), Max('rating'), Min('rating'), Max('pressure'), Min('pressure'), Max('waiting'), Min('waiting'))
+        return Response(limits)
+
 
 class SourceFilter(FilterSet):
     type         = MultipleChoiceFilter(choices=Source.TYPES)
@@ -43,6 +49,6 @@ class SourceFilter(FilterSet):
 
 class SourceViewSet(viewsets.ModelViewSet):
     queryset = Source.objects.all()
-    serializer_class = SourceSingleSerializer
+    serializer_class = SourceSerializer
     # filter_backends = (DjangoFilterBackend,)
     filter_class = SourceFilter

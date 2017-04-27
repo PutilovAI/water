@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+let dcopy =  require('deep-copy')
+
 import { Checkbox } from '../Input/Input';
 import { InputRange } from '../Input/Input';
 import Slider from 'react-slider';
@@ -61,7 +63,7 @@ class SearchRange extends Component{
     }
 }
 
-export default class SerchFilter extends Component {
+export default class SearchFilter extends Component {
     handlerChangeCheckbox(e){
 
         var oldFilter = this.props.filter,
@@ -93,7 +95,7 @@ export default class SerchFilter extends Component {
     handlerClickReset(e){
         e.preventDefault();
         var oldFilter = this.props.filter;
-        var newFilter = {...oldFilter};
+        var newFilter = dcopy(oldFilter);
 
         for (var key in oldFilter.checkboxes){
             var group = oldFilter.checkboxes[key];

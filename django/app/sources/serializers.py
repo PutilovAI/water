@@ -1,7 +1,7 @@
 from .models import Source
 from rest_framework import serializers
 
-class SourceSingleSerializer(serializers.ModelSerializer):
+class SourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Source
         exclude = ('created',)

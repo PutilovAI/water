@@ -19,6 +19,7 @@ import { connect } from 'react-redux'
 
 export class PageSearch extends Component {
 
+    //парсим get запрос и переводим в объект для фильтра
     strToFilter(str){
         let curFilter = this.props.searchFilter;
         let newFilter = dcopy(curFilter);
@@ -38,14 +39,16 @@ export class PageSearch extends Component {
 
             if (typeof cxb == 'object'){
                 for (let keyInner in cxb){
-
+                    let resMatch = str.match(new RegExp(key + "=("+keyInner+")+(?:&|$)", "i"))
+                    if (resMatch !== null)
+                        newFilter.checkboxes[key][keyInner] = true
+                    else
+                        newFilter.checkboxes[key][keyInner] = false
                 }
             } else {
                 let resMatch = str.match(new RegExp(key + "=(true|false)(?:&|$)", "i"))
                 if (resMatch && resMatch[1] !== undefined)
                     newFilter.checkboxes[key] = resMatch[1]
-
-                console.log(resMatch)
             }
         }
 
@@ -59,26 +62,50 @@ export class PageSearch extends Component {
         let historyState = history.location.state;
         let newFilter = {};
 
+        this.props.actions.fetchSearchFilterLimits( dcopy(this.props.searchFilter) )
+
         if (historyState && historyState.filter){
             newFilter = historyState.filter//Object
-            console.log(1)
 
         } else if(historySearch){
             newFilter = historySearch//string
             this.props.actions.searchFiltering(this.strToFilter(newFilter))
 
-            console.log(2)
         } else {
             newFilter = this.props.searchFilter;//Object
-            console.log(3)
         }
-        console.log(`newFilter = ${newFilter}`)
-        //console.log(`getFilter = ${getFilter}`)
-
-
 
         this.props.actions.fetchSearchResults(newFilter)
     }
+
+
+
+    throttle(func, ms){//Тормозилка для запросов к серверу
+        var timer = '';
+        var self = this;
+
+        function wrapper(){
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                func.apply(self, arguments)
+            }, ms)
+        }
+
+        return wrapper
+    }
+
+    fetchSearchResultsThrottle = this.throttle(::this.props.actions.fetchSearchResults, 500)
+
+    onChangefilter(filter){
+        this.props.actions.searchFiltering(filter)
+        this.fetchSearchResultsThrottle(filter)
+    }
+    onChangeSort(){
+
+    }
+
+
+
     render() {
 
         return (
@@ -121,7 +148,7 @@ export class PageSearch extends Component {
                         </main>
                         <aside className="search__content-aside">
                             <div className="search__content-aside-inner">
-                                <SearchFilter filter={this.props.searchFilter} onChange={::this.props.actions.searchFiltering}/>
+                                <SearchFilter filter={this.props.searchFilter} onChange={::this.onChangefilter}/>
                             </div>
 
                         </aside>

@@ -13,6 +13,7 @@ module.exports = {
         'webpack-hot-middleware/client',
         'isomorphic-fetch',
 
+
         './app/index.js'
     ],
     output: {
@@ -95,7 +96,7 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
-            'API_URL': JSON.stringify('http://127.0.0.1:8000')
+            'API_URL': JSON.stringify('http://127.0.0.1:8000/api')
         })
         //new ExtractTextPlugin('/css/')
     ],
