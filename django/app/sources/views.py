@@ -3,7 +3,9 @@ from __future__ import unicode_literals
 
 import django_filters
 from django_filters import NumberFilter, ModelMultipleChoiceFilter, MultipleChoiceFilter
-from django_filters.rest_framework import (DjangoFilterBackend, FilterSet)
+
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 
 from django.db.models import Max, Min
 from rest_framework.views import APIView
@@ -50,5 +52,6 @@ class SourceFilter(FilterSet):
 class SourceViewSet(viewsets.ModelViewSet):
     queryset = Source.objects.all()
     serializer_class = SourceSerializer
-    # filter_backends = (DjangoFilterBackend,)
     filter_class = SourceFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter, ]
+    ordering_fields = ('distance', 'rating', 'pressure')

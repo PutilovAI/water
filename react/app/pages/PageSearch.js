@@ -21,36 +21,55 @@ export class PageSearch extends Component {
 
     //парсим get запрос и переводим в объект для фильтра
     strToFilter(str){
-        let curFilter = this.props.searchFilter;
-        let newFilter = dcopy(curFilter);
+        let searchFilter = dcopy(this.props.searchFilter),
+            offersFilter = dcopy(this.props.offersFilter),
+            newFilter = {};
 
-        for (let key in newFilter.ranges){
+        for (let key in searchFilter.ranges){
 
             let min = str.match(new RegExp(key + "_min=(\\d+)"))
             let max = str.match(new RegExp(key + "_max=(\\d+)"))
 
-            if (min && min[1] !== undefined) newFilter.ranges[key].value[0] = parseFloat(min[1])
-            if (max && max[1] !== undefined) newFilter.ranges[key].value[1] = parseFloat(max[1])
+            if (min && min[1] !== undefined) searchFilter.ranges[key].value[0] = parseFloat(min[1])
+            if (max && max[1] !== undefined) searchFilter.ranges[key].value[1] = parseFloat(max[1])
 
         }
 
-        for (let key in newFilter.checkboxes){
-            let cxb = newFilter.checkboxes[key]
+        for (let key in searchFilter.checkboxes){
+            let cxb = searchFilter.checkboxes[key]
 
             if (typeof cxb == 'object'){
                 for (let keyInner in cxb){
                     let resMatch = str.match(new RegExp(key + "=("+keyInner+")+(?:&|$)", "i"))
                     if (resMatch !== null)
-                        newFilter.checkboxes[key][keyInner] = true
+                        searchFilter.checkboxes[key][keyInner] = true
                     else
-                        newFilter.checkboxes[key][keyInner] = false
+                        searchFilter.checkboxes[key][keyInner] = false
                 }
             } else {
                 let resMatch = str.match(new RegExp(key + "=(true|false)(?:&|$)", "i"))
                 if (resMatch && resMatch[1] !== undefined)
-                    newFilter.checkboxes[key] = resMatch[1]
+                    searchFilter.checkboxes[key] = resMatch[1]
             }
         }
+
+        let sort = str.match(/ordering=(.+)(?:&|$)/),
+            sortField,
+            sortOrder;
+
+
+        if (sort && sort[1]){
+            sortField = sort[1].replace(/^\-/, '');
+            sortOrder = sort[1].match(/^(\-)/) ? 'decrement' : 'increment';
+
+            offersFilter.value = sortField;
+            offersFilter.order = sortOrder;
+        }
+
+        newFilter = {
+            searchFilter: searchFilter,
+            offersFilter: offersFilter
+        };
 
         return newFilter;
 
@@ -65,19 +84,21 @@ export class PageSearch extends Component {
 
         if (historyState && historyState.filter){//Object
             newFilter = historyState.filter
-
+            console.log('historyState')
         } else if(historySearch){//string
             newFilter = this.strToFilter(historySearch)
-
+            console.log('historySearch')
         } else {//Object
-            newFilter = this.props.searchFilter;
+            newFilter = {
+                searchFilter: this.props.searchFilter,
+                offersFilter: this.props.offersFilter
+            };
+            console.log('propes')
         }
         //Получаем результаты только после установки параметров фильтра
         this.props.actions.fetchSearchFilterLimits( newFilter, this.props.actions.fetchSearchResults )
 
     }
-
-
 
     throttle(func, ms){//Тормозилка для запросов к серверу
         var timer = '';
@@ -96,8 +117,12 @@ export class PageSearch extends Component {
     fetchSearchResultsThrottle = this.throttle(::this.props.actions.fetchSearchResults, 500)
 
     onChangefilter(filter){
-        this.props.actions.searchFiltering(filter)
+        this.props.actions.searchFiltering(filter.searchFilter)
         this.fetchSearchResultsThrottle(filter)
+    }
+    onChangeOffersSortSelect(filter){
+        // this.props.actions.offersFiltering(filter)
+        // this.fetchSearchResultsThrottle(filter)
     }
     onChangeSort(){
 
@@ -126,7 +151,7 @@ export class PageSearch extends Component {
 
                             <div className="offers-toolbar">
                                 <div className="offers-toolbar__filters">
-                                    <OffersFilter value={this.props.offersFilter.value} selectOnChange={this.props.actions.offersFiltering} sortOnChange={this.props.actions.offersSorting} order={this.props.offersFilter.order}/>
+                                    <OffersFilter value={this.props.offersFilter.value} selectOnChange={::this.onChangeOffersSortSelect} sortOnChange={this.props.actions.offersSorting} order={this.props.offersFilter.order}/>
 
                                 </div>
                                 <div className="offers-toolbar__switches">

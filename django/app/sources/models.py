@@ -20,6 +20,7 @@ class Source(models.Model):
     visitors = models.PositiveIntegerField()
     # code     = models.TextField()
     analiz   = models.BooleanField(default=False)
+    img      = models.ImageField(upload_to='sources', null=True, max_length=255)
 
 
     class Meta:

@@ -1,5 +1,6 @@
 import {
-    SERVER_URL
+    SERVER_URL,
+    GET_FILTER_INIT
 
 } from '../constants/Search'
 
@@ -20,10 +21,10 @@ export function searchFiltering(filter){
         searchFilter: filter
     }
 }
-export function offersFiltering(val){
+export function offersFiltering(filter){
     return {
         type: 'OFFERS_FILTER',
-        value: val
+        offersFilter: filter
     }
 }
 export function offersSorting(e){
@@ -38,31 +39,39 @@ export function recievedSearchResult(results){
     }
 }
 function filterToStr(filter){
-    var str = '?';
+    filter = dcopy(filter);
+    var str = '?',
+        searchFilter = filter.searchFilter,
+        offersFilter = filter.offersFilter,
+        sortOrder = offersFilter.order == 'decrement' ?  '-' : '';
 
-    for (let key in filter.checkboxes){
-        let cxb = filter.checkboxes[key]
+    str += `${sortOrder}${offersFilter.value}&`;
+
+    for (let key in searchFilter.checkboxes){
+        let cxb = searchFilter.checkboxes[key]
 
         if (typeof cxb == 'object'){
             for (let keyInner in cxb){
-                if (filter.checkboxes[key][keyInner] == true)
+                if (searchFilter.checkboxes[key][keyInner] == true)
                     str += `${key}=${keyInner}&`
             }
         } else {
-            if (filter.checkboxes[key] == true)
+            if (searchFilter.checkboxes[key] == true)
                 str += `${key}=true&`
         }
     }
 
-    for (let key in filter.ranges){
-        let range = filter.ranges[key];
+    for (let key in searchFilter.ranges){
+        let range = searchFilter.ranges[key];
         str += `${key}_min=${range.value[0]}&${key}_max=${range.value[1]}&`
     }
+
 
     str = str.replace(/\&$/g, '')
     return str;
 }
 export function fetchSearchResults(filter){
+    console.log('fetchSearchResults')
 
     var getFilter = '';
 
@@ -85,10 +94,10 @@ export function fetchSearchResults(filter){
             })
             .then(responce => responce.json())
             .then(data => {
-                if (typeof filter !== 'string')
-                    history.push(getFilter, {filter: filter});
-                else
-                    history.push(getFilter);
+                // if (typeof filter !== 'string')
+                //     history.push(getFilter, {filter: filter});
+                // else
+                //     history.push(getFilter);
 
                 dispatch( recievedSearchResult(data) )
             })
@@ -96,10 +105,11 @@ export function fetchSearchResults(filter){
 }
 
 export function fetchSearchFilterLimits(filter, cb_success){
+    console.log('fetchSearchFilterLimits')
     filter = dcopy(filter);
 
     return function(dispatch){
-        return fetch(`${SERVER_URL}/test/`,
+        return fetch(`${GET_FILTER_INIT}`,
             {
                 method: 'get',
                 headers: {
@@ -111,7 +121,10 @@ export function fetchSearchFilterLimits(filter, cb_success){
             })
             .then(responce => responce.json())
             .then(data => {
-                var limits = {}
+                var limits = {},
+                    newFilter = {},
+                    searchFilter = filter.searchFilter,
+                    offersFilter = filter.offersFilter;
 
                 for (let key in data){
                     let name = key.match(/(.+)__/i);
@@ -133,28 +146,45 @@ export function fetchSearchFilterLimits(filter, cb_success){
 
                 }
 
-                for (let key in filter.ranges){
+                for (let key in searchFilter.ranges){
 
-                    let max = limits[key].max
-                    let min = limits[key].min
+                    let max = limits[key].max,
+                        min = limits[key].min,
+                        rangeValMin = searchFilter.ranges[key].value[0],
+                        rangeValMax = searchFilter.ranges[key].value[1];
 
                     if (min !== undefined){
-                        filter.ranges[key].limit[0] = min
+                        searchFilter.ranges[key].limit[0] = min
 
-                        if(filter.ranges[key].value[0] == undefined || filter.ranges[key].value[0] < min){
-                            filter.ranges[key].value[0] = min
+                        if(rangeValMin == undefined || rangeValMin < min){
+                            searchFilter.ranges[key].value[0] = min
                         }
                     }
+                    rangeValMin = searchFilter.ranges[key].value[0]
 
                     if (max !== undefined){
-                        filter.ranges[key].limit[1] = max
-                        if (filter.ranges[key].value[1] == undefined || filter.ranges[key].value[1] > max )
-                            filter.ranges[key].value[1] = max
+                        searchFilter.ranges[key].limit[1] = max
+
+                        if (rangeValMax !== undefined){
+                            if (rangeValMax <= rangeValMin){
+                                searchFilter.ranges[key].value[1] = rangeValMin
+                            }
+                            if (searchFilter.ranges[key].value[1] > max){
+                                searchFilter.ranges[key].value[1] = max
+                            }
+                        } else {
+                            searchFilter.ranges[key].value[1] = max
+                        }
                     }
                 }
 
-                dispatch( searchFiltering(filter) )
-                cb_success(filter)
+                newFilter = {
+                    searchFilter: searchFilter,
+                    offersFilter: offersFilter
+                }
+
+                dispatch( searchFiltering(searchFilter) )
+                cb_success(newFilter)
             })
     }
 }

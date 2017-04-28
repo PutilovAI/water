@@ -17,6 +17,9 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework import routers
 from sources import views
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 router = routers.DefaultRouter()
 
@@ -26,5 +29,8 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^api/test/', views.SourceFilterLimits.as_view())
+    url(r'^api/search-filter-init/', views.SourceFilterLimits.as_view())
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
