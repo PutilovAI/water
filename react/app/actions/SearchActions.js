@@ -5,6 +5,7 @@ import {
 
 import createHistory from 'history/createBrowserHistory'
 const history = createHistory()
+let dcopy =  require('deep-copy')
 
 function getCookie(name) {
   var matches = document.cookie.match(new RegExp(
@@ -94,7 +95,8 @@ export function fetchSearchResults(filter){
     }
 }
 
-export function fetchSearchFilterLimits(filter){
+export function fetchSearchFilterLimits(filter, cb_success){
+    filter = dcopy(filter);
 
     return function(dispatch){
         return fetch(`${SERVER_URL}/test/`,
@@ -139,21 +141,20 @@ export function fetchSearchFilterLimits(filter){
                     if (min !== undefined){
                         filter.ranges[key].limit[0] = min
 
-                        if(!filter.options.initialed || filter.ranges[key].value[0] < min ){
+                        if(filter.ranges[key].value[0] == undefined || filter.ranges[key].value[0] < min){
                             filter.ranges[key].value[0] = min
                         }
                     }
 
                     if (max !== undefined){
                         filter.ranges[key].limit[1] = max
-                        if (!filter.options.initialed || filter.ranges[key].value[1] > max)
+                        if (filter.ranges[key].value[1] == undefined || filter.ranges[key].value[1] > max )
                             filter.ranges[key].value[1] = max
                     }
                 }
 
-                filter.options.initialed = true;
-
                 dispatch( searchFiltering(filter) )
+                cb_success(filter)
             })
     }
 }

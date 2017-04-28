@@ -10,7 +10,7 @@ class SearchRange extends Component{
 
         var type = this.props.type,
             oldFilter = this.props.filter,
-            newFilter = {...oldFilter},
+            newFilter = dcopy(oldFilter),
             newValue  = oldFilter.ranges[type].value;
 
         if (newValue[0] == newValue[1]) {
@@ -27,7 +27,7 @@ class SearchRange extends Component{
     onChangeInput(e){
         var type = this.props.type,
             oldFilter = this.props.filter,
-            newFilter = {...oldFilter},
+            newFilter = dcopy(oldFilter),
             direction = e.target.dataset.direction,
             newValue  = oldFilter.ranges[type].value,
             targetValue = parseInt(e.target.value);
@@ -69,26 +69,12 @@ export default class SearchFilter extends Component {
         var oldFilter = this.props.filter,
             cxbGroup = e.target.dataset.group,
             cxbName = e.target.dataset.name,
-            newFilter = null;
+            newFilter = dcopy(oldFilter);
 
-        if (cxbGroup){
-            newFilter = Object.assign({}, oldFilter,
-                {
-                    checkboxes: Object.assign({}, oldFilter.checkboxes, {
-                        [cxbGroup]: Object.assign({}, oldFilter.checkboxes[cxbGroup], {
-                            [cxbName]: e.target.checked
-                        })
-                    })
-                } );
-
-        } else {
-            newFilter = Object.assign({}, oldFilter,
-                {
-                    checkboxes: Object.assign({}, oldFilter.checkboxes, {
-                        [cxbName]: e.target.checked
-                    })
-                } );
-        }
+        if (cxbGroup)
+            newFilter.checkboxes[cxbGroup][cxbName] = e.target.checked
+        else
+            newFilter.checkboxes[cxbName] = e.target.checked
 
         this.props.onChange.call(this, newFilter);
     }
@@ -97,11 +83,10 @@ export default class SearchFilter extends Component {
         var oldFilter = this.props.filter;
         var newFilter = dcopy(oldFilter);
 
-        for (var key in oldFilter.checkboxes){
-            var group = oldFilter.checkboxes[key];
+        for (let key in newFilter.checkboxes){
+            var group = newFilter.checkboxes[key];
 
             if (typeof group === 'boolean'){
-
                 newFilter.checkboxes[key] = false
 
             } else if ( typeof group == 'object'){
@@ -111,6 +96,12 @@ export default class SearchFilter extends Component {
                     newFilter.checkboxes[key][innerkey] = false
                 }
             }
+        }
+
+        for (let key in newFilter.ranges){
+            let range = newFilter.ranges[key];
+            range.value[0] = range.limit[0]
+            range.value[1] = range.limit[1]
         }
 
         this.props.onChange.call(this, newFilter);

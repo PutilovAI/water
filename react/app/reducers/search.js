@@ -4,9 +4,6 @@ const initialState = {
         order: 'increment'
     },
     searchFilter: {
-        options: {
-            initialed: false
-        },
         checkboxes: {
             type: {
                 rodnik: false,
@@ -16,20 +13,20 @@ const initialState = {
         },
         ranges: {
             distance: {
-                limit: [0, 3000],
-                value: [0, 3000]
+                limit: [0,1],
+                value: [0,1]
             },
             rating: {
-                limit: [0, 10],
-                value: [0, 10]
+                limit: [0,1],
+                value: [0,1]
             },
             pressure: {
-                limit: [0, 30],
-                value: [0, 30]
+                limit: [0,1],
+                value: [0,1]
             },
             waiting: {
-                limit: [0, 60],
-                value: [0, 60]
+                limit: [0,1],
+                value: [0,1]
             },
         }
     },

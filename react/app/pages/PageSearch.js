@@ -62,20 +62,19 @@ export class PageSearch extends Component {
         let historyState = history.location.state;
         let newFilter = {};
 
-        this.props.actions.fetchSearchFilterLimits( dcopy(this.props.searchFilter) )
 
-        if (historyState && historyState.filter){
-            newFilter = historyState.filter//Object
+        if (historyState && historyState.filter){//Object
+            newFilter = historyState.filter
 
-        } else if(historySearch){
-            newFilter = historySearch//string
-            this.props.actions.searchFiltering(this.strToFilter(newFilter))
+        } else if(historySearch){//string
+            newFilter = this.strToFilter(historySearch)
 
-        } else {
-            newFilter = this.props.searchFilter;//Object
+        } else {//Object
+            newFilter = this.props.searchFilter;
         }
+        //Получаем результаты только после установки параметров фильтра
+        this.props.actions.fetchSearchFilterLimits( newFilter, this.props.actions.fetchSearchResults )
 
-        this.props.actions.fetchSearchResults(newFilter)
     }
 
 
@@ -103,7 +102,6 @@ export class PageSearch extends Component {
     onChangeSort(){
 
     }
-
 
 
     render() {
