@@ -6,21 +6,22 @@ import { InputRange } from '../Input/Input';
 import Slider from 'react-slider';
 
 class SearchRange extends Component{
+
     onChangeSlider(valuesArray){
 
         var type = this.props.type,
             oldFilter = this.props.filter,
             newFilter = dcopy(oldFilter),
-            newValue  = oldFilter.ranges[type].value;
+            newValue  = newFilter.searchFilter.ranges[type].value;
 
         if (newValue[0] == newValue[1]) {
             newValue[1] += 1
         }
 
-        newValue[0] = Math.max(newValue[0], oldFilter.ranges[type].limit[0]);
-        newValue[1] = Math.min(newValue[1], oldFilter.ranges[type].limit[1]);
+        newValue[0] = Math.max(newValue[0], oldFilter.searchFilter.ranges[type].limit[0]);
+        newValue[1] = Math.min(newValue[1], oldFilter.searchFilter.ranges[type].limit[1]);
 
-        newFilter.ranges[type].value = valuesArray;
+        newFilter.searchFilter.ranges[type].value = valuesArray;
 
         this.props.onChange.call(this, newFilter);
     }
@@ -29,27 +30,27 @@ class SearchRange extends Component{
             oldFilter = this.props.filter,
             newFilter = dcopy(oldFilter),
             direction = e.target.dataset.direction,
-            newValue  = oldFilter.ranges[type].value,
+            newValue  = oldFilter.searchFilter.ranges[type].value,
             targetValue = parseInt(e.target.value);
 
         if (direction == 'from'){
-            newValue[0] = Math.max(targetValue, oldFilter.ranges[type].limit[0]);
+            newValue[0] = Math.max(targetValue, oldFilter.searchFilter.ranges[type].limit[0]);
 
         } else {
-            newValue[1] = Math.min(targetValue, oldFilter.ranges[type].limit[1])
+            newValue[1] = Math.min(targetValue, oldFilter.searchFilter.ranges[type].limit[1])
         }
 
-        newFilter.ranges[type].value = newValue;
+        newFilter.searchFilter.ranges[type].value = newValue;
 
         this.props.onChange.call(this, newFilter);
     }
     render(){
         var self = this,
             type = self.props.type,
-            valueFrom = this.props.filter.ranges[type].value[0],
-            valueTo   = this.props.filter.ranges[type].value[1],
-            limitMin  = this.props.filter.ranges[type].limit[0],
-            limitMax  = this.props.filter.ranges[type].limit[1];
+            valueFrom = this.props.filter.searchFilter.ranges[type].value[0],
+            valueTo   = this.props.filter.searchFilter.ranges[type].value[1],
+            limitMin  = this.props.filter.searchFilter.ranges[type].limit[0],
+            limitMax  = this.props.filter.searchFilter.ranges[type].limit[1];
         return (
             <div className="search-filter__slider">
                 <Slider  min={limitMin} max={limitMax} value={[valueFrom, valueTo]} withBars onChange={::this.onChangeSlider} />
@@ -64,6 +65,7 @@ class SearchRange extends Component{
 }
 
 export default class SearchFilter extends Component {
+
     handlerChangeCheckbox(e){
 
         var oldFilter = this.props.filter,
@@ -72,9 +74,9 @@ export default class SearchFilter extends Component {
             newFilter = dcopy(oldFilter);
 
         if (cxbGroup)
-            newFilter.checkboxes[cxbGroup][cxbName] = e.target.checked
+            newFilter.searchFilter.checkboxes[cxbGroup][cxbName] = e.target.checked
         else
-            newFilter.checkboxes[cxbName] = e.target.checked
+            newFilter.searchFilter.checkboxes[cxbName] = e.target.checked
 
         this.props.onChange.call(this, newFilter);
     }
@@ -83,23 +85,23 @@ export default class SearchFilter extends Component {
         var oldFilter = this.props.filter;
         var newFilter = dcopy(oldFilter);
 
-        for (let key in newFilter.checkboxes){
-            var group = newFilter.checkboxes[key];
+        for (let key in newFilter.searchFilter.checkboxes){
+            var group = newFilter.searchFilter.checkboxes[key];
 
             if (typeof group === 'boolean'){
-                newFilter.checkboxes[key] = false
+                newFilter.searchFilter.checkboxes[key] = false
 
             } else if ( typeof group == 'object'){
-                newFilter.checkboxes[key] = {};
+                newFilter.searchFilter.checkboxes[key] = {};
 
                 for (let innerkey in group){
-                    newFilter.checkboxes[key][innerkey] = false
+                    newFilter.searchFilter.checkboxes[key][innerkey] = false
                 }
             }
         }
 
-        for (let key in newFilter.ranges){
-            let range = newFilter.ranges[key];
+        for (let key in newFilter.searchFilter.ranges){
+            let range = newFilter.searchFilter.ranges[key];
             range.value[0] = range.limit[0]
             range.value[1] = range.limit[1]
         }
@@ -117,9 +119,9 @@ export default class SearchFilter extends Component {
                         </div>
                         <div className="search-filter__field">
 
-                            <Checkbox label='Родник' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.type.rodnik} onChange={::this.handlerChangeCheckbox} attr={{'data-group': 'type', 'data-name': 'rodnik' }} />
+                            <Checkbox label='Родник' modifier="search-filter__checkbox" checked={this.props.filter.searchFilter.checkboxes.type.rodnik} onChange={::this.handlerChangeCheckbox} attr={{'data-group': 'type', 'data-name': 'rodnik' }} />
 
-                            <Checkbox label='Колонка' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.type.kolonka} onChange={::this.handlerChangeCheckbox} attr={{'data-group': 'type', 'data-name': 'kolonka'}} />
+                            <Checkbox label='Колонка' modifier="search-filter__checkbox" checked={this.props.filter.searchFilter.checkboxes.type.kolonka} onChange={::this.handlerChangeCheckbox} attr={{'data-group': 'type', 'data-name': 'kolonka'}} />
 
                         </div>
                     </div>
@@ -160,7 +162,7 @@ export default class SearchFilter extends Component {
                     <div className="search-filter__fieldset">
 
                         <div className="search-filter__field">
-                            <Checkbox label='Анализ воды' modifier="search-filter__checkbox" checked={this.props.filter.checkboxes.analiz} onChange={::this.handlerChangeCheckbox} attr={{'data-name': 'analiz'}} />
+                            <Checkbox label='Анализ воды' modifier="search-filter__checkbox" checked={this.props.filter.searchFilter.checkboxes.analiz} onChange={::this.handlerChangeCheckbox} attr={{'data-name': 'analiz'}} />
                         </div>
 
                     </div>

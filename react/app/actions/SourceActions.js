@@ -28,7 +28,6 @@ export function fetchItem(id){
             })
             .then(responce => responce.json())
             .then(data => {
-                console.log(data)
                 dispatch(receivedSource(data));
             })
     }

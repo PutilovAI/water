@@ -21,9 +21,9 @@ export class PageSearch extends Component {
 
     //парсим get запрос и переводим в объект для фильтра
     strToFilter(str){
-        let searchFilter = dcopy(this.props.searchFilter),
-            offersFilter = dcopy(this.props.offersFilter),
-            newFilter = {};
+        let newFilter = dcopy(this.props.filter),
+            searchFilter = newFilter.searchFilter,
+            offersFilter = newFilter.offersFilter;
 
         for (let key in searchFilter.ranges){
 
@@ -60,16 +60,11 @@ export class PageSearch extends Component {
 
         if (sort && sort[1]){
             sortField = sort[1].replace(/^\-/, '');
-            sortOrder = sort[1].match(/^(\-)/) ? 'decrement' : 'increment';
+            sortOrder = sort[1].match(/^(\-)/) ? 'increment' : 'decrement';
 
             offersFilter.value = sortField;
             offersFilter.order = sortOrder;
         }
-
-        newFilter = {
-            searchFilter: searchFilter,
-            offersFilter: offersFilter
-        };
 
         return newFilter;
 
@@ -84,17 +79,16 @@ export class PageSearch extends Component {
 
         if (historyState && historyState.filter){//Object
             newFilter = historyState.filter
+            newFilter.options.initialized = true;
             console.log('historyState')
         } else if(historySearch){//string
             newFilter = this.strToFilter(historySearch)
+            newFilter.options.initialized = true;
             console.log('historySearch')
         } else {//Object
-            newFilter = {
-                searchFilter: this.props.searchFilter,
-                offersFilter: this.props.offersFilter
-            };
-            console.log('propes')
+            newFilter = this.props.filter
         }
+
         //Получаем результаты только после установки параметров фильтра
         this.props.actions.fetchSearchFilterLimits( newFilter, this.props.actions.fetchSearchResults )
 
@@ -117,15 +111,17 @@ export class PageSearch extends Component {
     fetchSearchResultsThrottle = this.throttle(::this.props.actions.fetchSearchResults, 500)
 
     onChangefilter(filter){
-        this.props.actions.searchFiltering(filter.searchFilter)
+        this.props.actions.searchFiltering(filter)
         this.fetchSearchResultsThrottle(filter)
     }
     onChangeOffersSortSelect(filter){
-        // this.props.actions.offersFiltering(filter)
-        // this.fetchSearchResultsThrottle(filter)
+        this.props.actions.offersFiltering(filter)
+        this.fetchSearchResultsThrottle(filter)
     }
-    onChangeSort(){
 
+    onChangeOffersSort(filter){
+        this.props.actions.offersSorting(filter)
+        this.fetchSearchResultsThrottle(filter)
     }
 
 
@@ -151,7 +147,7 @@ export class PageSearch extends Component {
 
                             <div className="offers-toolbar">
                                 <div className="offers-toolbar__filters">
-                                    <OffersFilter value={this.props.offersFilter.value} selectOnChange={::this.onChangeOffersSortSelect} sortOnChange={this.props.actions.offersSorting} order={this.props.offersFilter.order}/>
+                                    <OffersFilter filter={this.props.filter} value={this.props.filter.offersFilter.value} selectOnChange={::this.onChangeOffersSortSelect} sortOnChange={::this.onChangeOffersSort} order={this.props.filter.offersFilter.order}/>
 
                                 </div>
                                 <div className="offers-toolbar__switches">
@@ -166,12 +162,12 @@ export class PageSearch extends Component {
                             </div>
 
 
-                            <SearchResults searchFilter={this.props.searchFilter} items={this.props.searchResults} offersFilter={this.props.offersFilter}/>
+                            <SearchResults searchFilter={this.props.filter} items={this.props.searchResults} offersFilter={this.props.filter}/>
 
                         </main>
                         <aside className="search__content-aside">
                             <div className="search__content-aside-inner">
-                                <SearchFilter filter={this.props.searchFilter} onChange={::this.onChangefilter}/>
+                                <SearchFilter filter={this.props.filter} onChange={::this.onChangefilter}/>
                             </div>
 
                         </aside>
@@ -185,10 +181,9 @@ export class PageSearch extends Component {
 
 function mapStateToProps(state) {
   return {
-    offersFilter: state.search.offersFilter,
-    searchFilter: state.search.searchFilter,
-    searchResults: state.search.searchResults
-  }
+        filter: state.search.filter,
+        searchResults: state.search.searchResults
+    }
 }
 
 function mapDispatchToProps(dispatch) {
