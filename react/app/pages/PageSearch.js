@@ -80,11 +80,11 @@ export class PageSearch extends Component {
         if (historyState && historyState.filter){//Object
             newFilter = historyState.filter
             newFilter.options.initialized = true;
-            console.log('historyState')
+
         } else if(historySearch){//string
             newFilter = this.strToFilter(historySearch)
             newFilter.options.initialized = true;
-            console.log('historySearch')
+
         } else {//Object
             newFilter = this.props.filter
         }

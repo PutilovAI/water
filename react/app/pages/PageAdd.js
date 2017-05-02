@@ -6,6 +6,8 @@ import * as AppActions from '../actions/AppActions'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+import {InputText, InputTextarea, Checkbox} from '../components/Input/Input'
+
 export class PageAdd extends Component {
 
     render() {
@@ -22,6 +24,31 @@ export class PageAdd extends Component {
                     <h4 className="">
                         Текст
                     </h4>
+                    <fieldset className="form__fieldset">
+                        <div className="form__fieldset-header">
+                            <div className="form__fieldset-title">Местоположение</div>
+                        </div>
+                        <div className="form__fieldset-container">
+                            <InputText label="Населеный пункт" id="address"/>
+                            <InputText label="Ориентир" id="landmark"/>
+                            <InputText id=""/>
+                            <InputTextarea label="Как проехать" id="route"/>
+                        </div>
+                    </fieldset>
+
+                    <fieldset className="form__fieldset">
+                        <div className="form__fieldset-header">
+                            <div className="form__fieldset-title">Информация</div>
+                        </div>
+                        <div className="form__fieldset-container">
+                            <InputText label="Название" name="pressure" id="title"/>
+                            <InputText label="Напор воды, литр/мин" name="pressure" id="pressure"/>
+                            <InputText label="Ожидание, мин" name="waiting" id="waiting"/>
+                            <Checkbox label="Анализ"/>
+                            <InputTextarea label="Описание" id="description"/>
+
+                        </div>
+                    </fieldset>
 
 
 
