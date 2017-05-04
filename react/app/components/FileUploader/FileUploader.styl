@@ -1,0 +1,41 @@
+.fileuploader
+    &__dropzone
+        display: block;
+        border 2px dashed $color-border
+        padding 60px
+        border-radius: 4px
+        base-transition()
+        &:hover
+            border-color darken($color-border, 15%)
+            cursor pointer
+        &.dragenter
+            background-color: lighten($color-second, 70%)
+            & *
+                pointer-events:  none
+    &__dropzone-container
+        flex-center()
+
+    &__field
+        position: absolute;
+        left -6000px
+        opacity: 0.01
+    &__file
+        margin-right 20px
+        margin-bottom: 20px
+    &__file-img-wrap
+        width: 150px
+        height: 150px
+        flex-center()
+        border 1px solid $color-border
+        border-radius 5px
+        overflow: hidden;
+    &__file-img
+        display: block;
+        max-height: 150px
+        max-width: 150px
+    &__files
+        display: flex
+        flex-wrap: wrap;
+    &__label
+        font-size: $fsH3
+        color $color-grey

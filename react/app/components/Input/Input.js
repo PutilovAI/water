@@ -16,16 +16,18 @@ export class Checkbox extends Component{
 
     handlerOnChange(e){
         this.setState({
-            checked : !this.state.checked
+            checked : e.target.checked
         })
-        //this.props.onChange.call(this, e);
+        if (this.props.onChange)
+            this.props.onChange.call(this, e);
     }
 
     render () {
+        var checked = this.props.checked !== undefined ? this.props.checked : this.state.checked
         return (
-            <div className={'input input_checkbox' + (this.state.checked ? ' checked' : '') + ' '+this.props.modifier} >
+            <div className={'input input_checkbox' + (checked ? ' checked' : '') + ' '+this.props.modifier} >
                 <label className='input__label'>
-                    <input type='checkbox' className='input__checkbox' onChange={::this.handlerOnChange}  checked={this.state.checked} {...this.props.attr}></input>
+                    <input type='checkbox' className='input__checkbox' onChange={::this.handlerOnChange}  checked={this.props.checked} {...this.props.attr}></input>
                     <div className='input__label-text'>{this.props.label}</div>
                 </label>
             </div>
@@ -79,18 +81,20 @@ export class InputText extends Component{
     }
 
     onChange(e){
-        this.props.onChange.call(this, e);
+        if (this.props.onChange)
+            this.props.onChange.apply(this, Array.from(arguments))
     }
 
     onFocus(e){
-        console.log(arguments)
-        //this.props.onFocus.apply(this, arguments)
+        if (this.props.onFocus)
+            this.props.onFocus.apply(this, Array.from(arguments))
         this.setState({
             inputState: ' focus'
         })
     }
     onBlur(e){
-        this.props.onBlur.apply(this, arguments)
+        if (this.props.onBlur)
+            this.props.onBlur.apply(this, Array.from(arguments))
         this.setState({
             inputState: ''
         })
