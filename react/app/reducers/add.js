@@ -1,18 +1,29 @@
-import {SERVER_URL, RECEIVED_SOURCE} from '../constants/Add'
+import * as C from '../constants/Add'
+const dcopy = require('deep-copy');
 
 const initialState = {
     form: {
         isValid: false,
-        fields: 0
+        fields: {
+            latitude: {//широта
+                value : '12'
+            },
+            longitude: {//долгота
+                value : ''
+            },
+            address: {
+                value : ''
+            }
+        }
     }
 }
 
 export default function app(state = initialState, action){
     switch(action.type) {
-        case  RECEIVED_SOURCE:
+        case  C.UPDATE_FORM:
             return {
                 ...state,
-                item: action.item
+                form: action.form
             }
         default:
             return state

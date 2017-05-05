@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
+const dcopy = require('deep-copy');
 
 import * as AddActions from '../actions/AddActions'
 
@@ -8,6 +9,7 @@ import { connect } from 'react-redux'
 
 import {InputText, InputTextarea, Checkbox} from '../components/Input/Input'
 import FileUploader from '../components/FileUploader/FileUploader'
+import {MapAdding} from '../components/Map/Map'
 
 export class PageAdd extends Component {
 
@@ -22,11 +24,21 @@ export class PageAdd extends Component {
             waiting : form.title.waiting
         }
 
-        console.dir(this.refs)
-        //this.props.actions.postForm(formBody)
+        this.props.actions.postForm(formBody)
     }
 
+    onChangeInput(e){
+        let input = e.target;
+        let inputValue = input.value;
+        let form = dcopy(this.props.form)
+
+        form.fields[input.id].value = inputValue;
+
+        this.props.actions.updateForm.call(this, form)
+    }
     render() {
+
+        var fields = this.props.form.fields;
 
         return (
 
@@ -53,16 +65,18 @@ export class PageAdd extends Component {
                                         <InputText label="Ориентир" id="landmark" modifier="h-mb_10"/>
                                         <div className="row">
                                             <div className="col_6">
-                                                <InputText attr={{"placeholder":"Ширина"}}/>
+                                                <InputText type="number" id="latitude" value={fields.latitude.value} attr={{"placeholder":"Ширина"}} onChange={::this.onChangeInput}/>
                                             </div>
                                             <div className="col_6">
-                                                <InputText attr={{"placeholder":"Долгота"}}/>
+                                                <InputText type="number" id="longitude" value={fields.longitude.value} attr={{"placeholder":"Долгота"}} onChange={::this.onChangeInput}/>
                                             </div>
                                         </div>
 
                                         <InputTextarea label="Как проехать" id="route"/>
                                     </div>
-                                    <div className="col_6"></div>
+                                    <div className="col_6">
+                                        <MapAdding zoom="10" form={this.props.form} updateForm={::this.props.actions.updateForm}/>
+                                    </div>
                                 </div>
 
                             </div>

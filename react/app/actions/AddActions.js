@@ -1,4 +1,4 @@
-import {SERVER_URL, RECEIVED_SOURCE} from '../constants/Add'
+import * as C from '../constants/Add'
 
 function getCookie(name) {
   var matches = document.cookie.match(new RegExp(
@@ -9,7 +9,7 @@ function getCookie(name) {
 
 export function postForm(formBody){
     return function(dispatch){
-        return fetch(`${SERVER_URL}/sources/`,
+        return fetch(`${C.SERVER_URL}/sources/`,
             {
                 method: 'POST',
                 headers: {
@@ -27,5 +27,11 @@ export function postForm(formBody){
             // .then(data => {
             //     dispatch(receivedSource(data));
             // })
+    }
+}
+export function updateForm(form){
+    return {
+        type : C.UPDATE_FORM,
+        form: form
     }
 }
