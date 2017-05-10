@@ -50,9 +50,11 @@
   },
   "dependencies": {
     "deep-copy": "^1.2.0",
+    "draft-js": "^0.10.0",
     "es6-promise": "^4.1.0",
     "history": "^4.6.1",
     "isomorphic-fetch": "^2.2.1",
+    "react-draft-wysiwyg": "^1.9.8",
     "react-router-redux": "^5.0.0-alpha.4"
   }
 }

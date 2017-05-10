@@ -6,7 +6,7 @@ const initialState = {
         isValid: false,
         fields: {
             latitude: {//широта
-                value : '12'
+                value : ''
             },
             longitude: {//долгота
                 value : ''

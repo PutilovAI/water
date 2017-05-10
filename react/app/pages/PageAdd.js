@@ -1,17 +1,60 @@
 import React, {Component} from 'react';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
 import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
 const dcopy = require('deep-copy');
 
 import * as AddActions from '../actions/AddActions'
 
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { Editor } from 'react-draft-wysiwyg';
 
 import {InputText, InputTextarea, Checkbox} from '../components/Input/Input'
 import FileUploader from '../components/FileUploader/FileUploader'
 import {MapAdding} from '../components/Map/Map'
 
+class MyEditor extends Component{
+    constructor(props){
+        super(props)
+        this.state = {
+            wrapperFocus: false
+        }
+    }
+
+    onFocus(){
+        this.setState({
+            wrapperFocus: true
+        })
+    }
+    onBlur(){
+        this.setState({
+            wrapperFocus: false
+        })
+    }
+
+    render(){
+        let  wrapperClassName = this.state.wrapperFocus ? 'focus' : ''
+        return(
+            <Editor
+                wrapperClassName={wrapperClassName}
+                localization={{ locale: 'ru'}}
+                toolbar={
+                    {
+                        options: ['inline', 'list', 'blockType', 'history' ],
+                        inline: {
+                            options:['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript']
+                        },
+                    }
+                }
+                onFocus={::this.onFocus}
+                onBlur={::this.onBlur}
+            />
+        )
+    }
+}
 export class PageAdd extends Component {
+
+
 
     onSubmit(e){
         e.preventDefault()
@@ -61,8 +104,7 @@ export class PageAdd extends Component {
                             <div className="form__fieldset-container">
                                 <div className="row">
                                     <div className="col_6">
-                                        <InputText label="Населеный пункт" id="address"/>
-                                        <InputText label="Ориентир" id="landmark" modifier="h-mb_10"/>
+                                        <InputText label="Адрес" id="address" value={fields.address.value}  onChange={::this.onChangeInput}/>
                                         <div className="row">
                                             <div className="col_6">
                                                 <InputText type="number" id="latitude" value={fields.latitude.value} attr={{"placeholder":"Ширина"}} onChange={::this.onChangeInput}/>
@@ -71,6 +113,8 @@ export class PageAdd extends Component {
                                                 <InputText type="number" id="longitude" value={fields.longitude.value} attr={{"placeholder":"Долгота"}} onChange={::this.onChangeInput}/>
                                             </div>
                                         </div>
+                                        <InputText label="Ориентир" id="landmark" modifier="h-mb_10"/>
+
 
                                         <InputTextarea label="Как проехать" id="route"/>
                                     </div>
@@ -106,6 +150,7 @@ export class PageAdd extends Component {
 
                                 <div className="row">
                                     <InputTextarea label="Описание" id="description"/>
+                                    <MyEditor />
                                 </div>
 
                             </div>

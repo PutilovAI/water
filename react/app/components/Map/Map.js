@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 
+const dcopy = require('deep-copy');
+import {throttle} from '../../assets/js/helpers'
+
 export class MapAdding extends Component{
     constructor(props){
         super(props)
@@ -15,54 +18,117 @@ export class MapAdding extends Component{
         this.mapInit();
     }
 
+    throttlePositionPlacemark = throttle(::this.positionPlacemark, 1000)
+    throttlePositionPlacemarkAddress = throttle(::this.positionPlacemarkAddress, 1000)
+
     componentWillReceiveProps(nextProps){
-        let latitude = nextProps.form.fields.latitude.value
-        let longitude = nextProps.form.fields.longitude.value
+        console.log('componentWillReceiveProps')
+        let oldLatitude  = this.props.form.fields.latitude.value
+        let oldLongitude = this.props.form.fields.longitude.value
+        let newLatitude  = nextProps.form.fields.latitude.value
+        let newLongitude = nextProps.form.fields.longitude.value
+
+        let oldAddress = this.props.form.fields.address.value
+        let newAddress = nextProps.form.fields.address.value
         let coords = []
 
-        if (latitude !== '' && longitude !== ''){
-            coords = [latitude, longitude];
-            this.createPlacemark(coords)
+        if (newLatitude !== '' && newLongitude !== '' && (oldLatitude !== newLatitude || oldLongitude !== newLongitude )){
+            coords = [newLatitude, newLongitude];
+            console.log('coords')
+            this.throttlePositionPlacemark(coords, false)
+        } else if (newAddress !== '' && newAddress !== oldAddress){
+            console.log('address')
+            this.throttlePositionPlacemarkAddress(newAddress)
         }
 
+
+
+    }
+
+    setCoordsPlacemark(coords){
+        if (this.myPlacemark)
+            this.myPlacemark.geometry.setCoordinates(coords);
+        else
+            this.createPlacemark(coords)
+    }
+
+    positionPlacemarkAddress(address, isNotChange){
+        var self = this;
+
+        ymaps.geocode(address, {
+           results: 1
+        }).then(function (res) {
+            // Выбираем первый результат геокодирования.
+            var firstGeoObject = res.geoObjects.get(0),
+               // Координаты геообъекта.
+               coords = firstGeoObject.geometry.getCoordinates(),
+               bounds = firstGeoObject.properties.get('boundedBy');
+
+            self.myMap.setBounds(bounds, {
+               // Проверяем наличие тайлов на данном масштабе.
+               checkZoomRange: true,
+               duration: 500
+
+            }).then(function(){
+                self.setCoordsPlacemark(coords)
+
+                if(!isNotChange)
+                    self.onChangePosition(coords, address);
+            });
+
+        });
+
+
+    }
+    positionPlacemark(coords, isNotChange){
+        let self = this;
+
+        self.setCoordsPlacemark(coords);
+
+        if (!isNotChange)
+            ymaps.geocode(coords, {
+               results: 1
+            }).then(function (res) {
+                // Выбираем первый результат геокодирования.
+                let firstGeoObject = res.geoObjects.get(0),
+                   // Координаты геообъекта.
+                    address = firstGeoObject.properties.get('text');
+
+                self.onChangePosition(coords, address);
+
+            });
+
+    }
+
+    onChangePosition(coords, address){
+        let self = this;
+        let form = dcopy(self.props.form);
+
+        form.fields.latitude.value = coords[0]
+        form.fields.longitude.value = coords[1]
+        form.fields.address.value = address
+
+        self.props.updateForm.call(self, form)
     }
 
     createPlacemark(coords){
         var self = this;
-        var myMap = self.myMap;
 
+        self.myPlacemark = new ymaps.Placemark(coords, {}, {
+            preset: 'islands#violetStretchyIcon',
+            draggable: true
+        });
 
-        if (self.myPlacemark) {
-            console.log('1')
-            self.myPlacemark.geometry.setCoordinates(coords);
+        self.myMap.geoObjects.add(self.myPlacemark);
 
-            //self.myPlacemarkCoords = coords;
-            //self._getGeoAddress(self.myPlacemarkCoords, self._setMapDescr );
+        // Слушаем событие окончания перетаскивания на метке.
+        self.myPlacemark.events.add('dragend', function (e) {
+            var curCoords = self.myPlacemark.geometry.getCoordinates();
 
-        }
-        // Если нет – создаем.
-        else {
-            console.log('2')
-            self.myPlacemark = new ymaps.Placemark(coords, {}, {
-                preset: 'islands#violetStretchyIcon',
-                draggable: true
-            });
-            console.log(self.myPlacemark)
+            self.positionPlacemark(curCoords)
 
-            self.myMap.geoObjects.add(self.myPlacemark);
-
-            // self.myPlacemarkCoords = coords;
-            // self._getGeoAddress(self.myPlacemarkCoords, self._setMapDescr);
-            //
-            // // Слушаем событие окончания перетаскивания на метке.
-            // self.myPlacemark.events.add('dragend', function (e) {
-            //     var curCoords = self.myPlacemark.geometry.getCoordinates();
-            //
-            //     self.myPlacemarkCoords = curCoords;
-            //
-            //     self._getGeoAddress(curCoords, self._setMapDescr);
-            // });
-        }
+            //self._getGeoAddress(curCoords, self._setMapDescr);
+        });
 
     };
 
@@ -84,6 +150,12 @@ export class MapAdding extends Component{
                     center: mapCenter,
                     zoom: self.options.zoom,
                     controls : ['typeSelector', 'fullscreenControl']
+                });
+
+                self.myMap.events.add('click', function (e) {
+                    var coords = e.get('coords');
+
+                    self.positionPlacemark(coords);
                 });
 
 
