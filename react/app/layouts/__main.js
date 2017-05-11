@@ -11,7 +11,7 @@ import { Route, Switch } from 'react-router'
 const __main = ( {component: Component, ...rest} ) => {
 
     return (
-        <Route {...rest} render={ props => (
+        <Route onUpdate={window.scrollTo(0,0)} {...rest} render={ props => (
             <div className="wrapper__page">
 
                 <div className='wrapper__page-top'>

@@ -1,8 +1,8 @@
-import {SERVER_URL, RECEIVED_SOURCE} from '../constants/Source'
+import * as c from '../constants/Source'
 
 export function receivedSource(item){
     return {
-        type: RECEIVED_SOURCE,
+        type: c.RECEIVED_SOURCE,
         item: item
     }
 }
@@ -16,7 +16,7 @@ function getCookie(name) {
 
 export function fetchItem(id){
     return function(dispatch){
-        return fetch(`${SERVER_URL}/sources/${id}/`,
+        return fetch(`${c.SERVER_URL}/sources/${id}/`,
             {
                 method: 'GET',
                 headers: {
@@ -26,9 +26,27 @@ export function fetchItem(id){
                 },
                 credentials: 'include'
             })
-            .then(responce => responce.json())
-            .then(data => {
-                dispatch(receivedSource(data));
+            .then(responce => {
+                return responce.json().then(json => ({ data: json, status: responce.status}) )
             })
+            .then( ({data, status}) => {
+                if (status == 200){
+                    dispatch({
+                        type: c.FETCH_SOURCE_SUCCESS
+                    })
+                    dispatch(receivedSource(data));
+                } else {
+                    dispatch({
+                        type: c.FETCH_SOURCE_FAIL
+                    })
+                }
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: c.FETCH_SOURCE_FAIL
+                })
+            })
+
     }
 }

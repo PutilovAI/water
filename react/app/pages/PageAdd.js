@@ -8,6 +8,7 @@ const dcopy = require('deep-copy');
 import * as AddActions from '../actions/AddActions'
 
 import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
 
 import {InputText, InputTextarea, Checkbox} from '../components/Input/Input'
 import FileUploader from '../components/FileUploader/FileUploader'
@@ -17,7 +18,9 @@ class MyEditor extends Component{
     constructor(props){
         super(props)
         this.state = {
-            wrapperFocus: false
+            wrapperFocus: false,
+            contentState: null,
+            contentHtml: null
         }
     }
 
@@ -31,24 +34,49 @@ class MyEditor extends Component{
             wrapperFocus: false
         })
     }
+    onMouseDownLabel(e){
+        if(!this.state.wrapperFocus)
+            this.refs.editor.wrapper.click()
+    }
+
+    onContentChange(content){
+
+        this.setState({
+            contentHtml : draftToHtml(content),
+            contentState : content,
+        });
+    }
 
     render(){
         let  wrapperClassName = this.state.wrapperFocus ? 'focus' : ''
         return(
-            <Editor
-                wrapperClassName={wrapperClassName}
-                localization={{ locale: 'ru'}}
-                toolbar={
-                    {
-                        options: ['inline', 'list', 'blockType', 'history' ],
-                        inline: {
-                            options:['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript']
-                        },
-                    }
+            <div>
+
+                { this.props.label &&
+                    <label className='input__label'>
+                        <div className='input__label-text' onMouseDown={::this.onMouseDownLabel}>{this.props.label}</div>
+                    </label>
                 }
-                onFocus={::this.onFocus}
-                onBlur={::this.onBlur}
-            />
+
+                <Editor
+                    ref="editor"
+                    toolbarOnFocus
+                    wrapperClassName={wrapperClassName}
+                    localization={{ locale: 'ru'}}
+                    toolbar={
+                        {
+                            options: ['inline', 'list', 'history' ],
+                            inline: {
+                                options:['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript']
+                            },
+                        }
+                    }
+                    onFocus={::this.onFocus}
+                    onBlur={::this.onBlur}
+                    onChange={::this.onContentChange}
+                />
+            </div>
+
         )
     }
 }
@@ -61,10 +89,17 @@ export class PageAdd extends Component {
         let form = e.target.elements;
 
         let formBody = {
+            address : form.address.value,
+            latitude: form.latitude.value,
+            longitude: form.longitude.value,
+            landmark: form.landmark.value,
+
             title : form.title.value,
-            address : form.title.address,
-            pressure : form.title.pressure,
-            waiting : form.title.waiting
+            pressure : form.pressure.value,
+            waiting : form.waiting.value,
+
+            route : this.refs.route.state.contentHtml,
+            description : this.refs.description.state.contentHtml
         }
 
         this.props.actions.postForm(formBody)
@@ -107,7 +142,7 @@ export class PageAdd extends Component {
                                         <InputText label="Адрес" id="address" value={fields.address.value}  onChange={::this.onChangeInput}/>
                                         <div className="row">
                                             <div className="col_6">
-                                                <InputText type="number" id="latitude" value={fields.latitude.value} attr={{"placeholder":"Ширина"}} onChange={::this.onChangeInput}/>
+                                                <InputText type="number" id="latitude" value={fields.latitude.value} attr={{"placeholder":"Широта"}} onChange={::this.onChangeInput}/>
                                             </div>
                                             <div className="col_6">
                                                 <InputText type="number" id="longitude" value={fields.longitude.value} attr={{"placeholder":"Долгота"}} onChange={::this.onChangeInput}/>
@@ -115,8 +150,8 @@ export class PageAdd extends Component {
                                         </div>
                                         <InputText label="Ориентир" id="landmark" modifier="h-mb_10"/>
 
+                                        <MyEditor label="Как проехать" ref="route" id="route"/>
 
-                                        <InputTextarea label="Как проехать" id="route"/>
                                     </div>
                                     <div className="col_6">
                                         <MapAdding zoom="10" form={this.props.form} updateForm={::this.props.actions.updateForm}/>
@@ -149,8 +184,7 @@ export class PageAdd extends Component {
                                 </div>
 
                                 <div className="row">
-                                    <InputTextarea label="Описание" id="description"/>
-                                    <MyEditor />
+                                    <MyEditor label="Описание" ref="description" id="description"/>
                                 </div>
 
                             </div>

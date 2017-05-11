@@ -3,6 +3,81 @@ import React, {Component} from 'react';
 const dcopy = require('deep-copy');
 import {throttle} from '../../assets/js/helpers'
 
+export class MapPlacemark extends Component{
+    constructor(props){
+        super(props)
+        this.myMap = null;
+        this.myPlacemark = null;
+        this.isCoordsValid = false;
+        this.options = {
+            coords: props.coords || ['', ''],
+            zoom : props.zoom || 13
+        }
+
+    }
+
+    componentWillReceiveProps(nextProps){
+
+        if (nextProps.coords[0] !== this.options.coords[0] || nextProps.coords[1] !== this.options.coords[1]){
+            this.options.coords = nextProps.coords
+        }
+
+        var lat = this.options.coords[0],
+            lon = this.options.coords[1];
+
+        if ( lat !== undefined && lon !== undefined && (lat !== 0 && lon !== 0) )
+            this.isCoordsValid = true
+
+        if (!this.myMap && this.isCoordsValid)
+            this.mapInit();
+    }
+
+    createPlacemark(coords){
+        var self = this;
+
+        self.myPlacemark = new ymaps.Placemark(coords, {}, {
+            preset: 'islands#violetStretchyIcon',
+            draggable: false
+        });
+
+        self.myMap.geoObjects.add(self.myPlacemark);
+
+    };
+
+    mapInit(){
+        let self = this;
+
+        ymaps.ready(function(){
+
+            var mapCenter = self.options.coords;
+
+            self.myMap = new ymaps.Map(self.refs.ya_map, {
+                center: mapCenter,
+                zoom: self.options.zoom,
+                controls : ['typeSelector', 'fullscreenControl', 'zoomControl']
+            });
+
+            self.createPlacemark(mapCenter)
+
+        });
+
+    }
+
+    render(){
+        if (!this.isCoordsValid) return false
+
+        return(
+            <div className="map map_placemark">
+                <div className="map__yandex" ref="ya_map">
+
+                </div>
+            </div>
+        )
+
+
+    }
+}
+
 export class MapAdding extends Component{
     constructor(props){
         super(props)
@@ -22,7 +97,7 @@ export class MapAdding extends Component{
     throttlePositionPlacemarkAddress = throttle(::this.positionPlacemarkAddress, 1000)
 
     componentWillReceiveProps(nextProps){
-        console.log('componentWillReceiveProps')
+
         let oldLatitude  = this.props.form.fields.latitude.value
         let oldLongitude = this.props.form.fields.longitude.value
         let newLatitude  = nextProps.form.fields.latitude.value
@@ -34,10 +109,10 @@ export class MapAdding extends Component{
 
         if (newLatitude !== '' && newLongitude !== '' && (oldLatitude !== newLatitude || oldLongitude !== newLongitude )){
             coords = [newLatitude, newLongitude];
-            console.log('coords')
+
             this.throttlePositionPlacemark(coords, false)
         } else if (newAddress !== '' && newAddress !== oldAddress){
-            console.log('address')
+
             this.throttlePositionPlacemarkAddress(newAddress)
         }
 
@@ -126,8 +201,6 @@ export class MapAdding extends Component{
             var curCoords = self.myPlacemark.geometry.getCoordinates();
 
             self.positionPlacemark(curCoords)
-
-            //self._getGeoAddress(curCoords, self._setMapDescr);
         });
 
     };
@@ -149,7 +222,7 @@ export class MapAdding extends Component{
                 self.myMap = new ymaps.Map(self.refs.ya_map, {
                     center: mapCenter,
                     zoom: self.options.zoom,
-                    controls : ['typeSelector', 'fullscreenControl']
+                    controls : ['typeSelector', 'fullscreenControl', 'zoomControl']
                 });
 
                 self.myMap.events.add('click', function (e) {

@@ -1,27 +1,48 @@
-import {SERVER_URL, RECEIVED_SOURCE} from '../constants/Source'
+import * as c from '../constants/Source'
 
 const initialState = {
+    sourceFetchedSuccess : false,
     item: {
-        id: 'water_source_1',
-        title: "Моя водичка на дровах возле хутора близ Диканьки",
-        address: "Сверд. обл., Камышловский р-н, д. Бабайка, ул. Советская, 15",
-        type: 'rodnik',
-        typeText: "Родник",
-        analiz: true,
-        distance: "100",
-        pressure: "10",
-        rating: "6.7",
-        visitors: "15456",
-        img: '/dist/static/img/offer-card-1.jpg'
+        id: '',
+        title: "",
+        address: "",
+        latitude: '',
+        longitude: '',
+        route: '',
+        description: '',
+        type: '',
+        typeText: "",
+        analiz: false,
+        distance: "",
+        pressure: "",
+        rating: "",
+        visitors: "",
+        img: '',
+        success: false
     },
 }
 
 export default function app(state = initialState, action){
     switch(action.type) {
-        case  RECEIVED_SOURCE:
+        case c.RECEIVED_SOURCE:
             return {
                 ...state,
                 item: action.item
+            }
+        case c.FETCH_SOURCE_SUCCESS:
+            return {
+                ...state,
+                sourceFetchedSuccess : true
+            }
+        case c.FETCH_SOURCE_FAIL:
+            return {
+                ...state,
+                sourceFetchedSuccess : false
+            }
+        case c.FETCH_SOURCE_CANCEL:
+            return {
+                ...state,
+                sourceFetchedSuccess: false
             }
         default:
             return state

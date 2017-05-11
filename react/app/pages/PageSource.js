@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import Header from '../components/Header/Header'
-import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
-import Footer from '../components/Footer/Footer'
 
 import * as SourceActions from '../actions/SourceActions'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+
+import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
+
+import {MapPlacemark} from '../components/Map/Map'
 
 export class PageSource extends Component {
 
@@ -15,13 +16,20 @@ export class PageSource extends Component {
         this.props.actions.fetchItem(id)
     }
     render() {
+
+        if (!this.props.sourceFetchedSuccess) return false;
+
         var ratingMod = 'low',
             rating = parseFloat(this.props.item.rating);
+
         if (rating >= 4 && rating < 8 ){
             ratingMod = 'mid'
         } else if (rating >= 8){
             ratingMod = 'high'
         }
+
+        var coords = [this.props.item.latitude, this.props.item.longitude]
+
         return (
 
             <section className="section">
@@ -33,6 +41,8 @@ export class PageSource extends Component {
                     </h1>
 
                     <p>{this.props.item.address}</p>
+                    <p>{this.props.item.landmark}</p>
+
 
 
                     <div className="page__row">
@@ -42,6 +52,14 @@ export class PageSource extends Component {
                             <div>
                                 <img src={this.props.item.img}></img>
                             </div>
+
+                            <div dangerouslySetInnerHTML={{ __html: this.props.item.description }}></div>
+
+                            <h2>Как проехать</h2>
+
+                            <MapPlacemark coords={coords} success={this.props.sourceFetchedSuccess}/>
+                            <div dangerouslySetInnerHTML={{ __html: this.props.item.route }}></div>
+
 
                         </main>
 
@@ -83,6 +101,7 @@ export class PageSource extends Component {
 function mapStateToProps(state) {
   return {
     item: state.source.item,
+    sourceFetchedSuccess: state.source.sourceFetchedSuccess
   }
 }
 
