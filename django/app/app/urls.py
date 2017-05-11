@@ -24,6 +24,7 @@ from django.conf import settings
 router = routers.DefaultRouter()
 
 router.register(r'sources', views.SourceViewSet)
+router.register(r'photos', views.SourcePhotoViewSet)
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),

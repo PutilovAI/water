@@ -12,8 +12,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from rest_framework import viewsets
-from .serializers import SourceSerializer
-from .models import Source
+from .serializers import SourceSerializer, SourcePhotoSerializer
+from .models import Source, SourcePhoto
 
 
 class SourceFilterLimits(APIView):
@@ -55,3 +55,7 @@ class SourceViewSet(viewsets.ModelViewSet):
     filter_class = SourceFilter
     filter_backends = [DjangoFilterBackend, OrderingFilter, ]
     ordering_fields = ('distance', 'rating', 'pressure')
+
+class SourcePhotoViewSet(viewsets.ModelViewSet):
+    queryset = SourcePhoto.objects.all()
+    serializer_class = SourcePhotoSerializer
